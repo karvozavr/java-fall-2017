@@ -1,6 +1,9 @@
 package ru.spbau.mit.karvozavr.matrix;
 
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 /**
  * Some very important operations with matrices
  */
@@ -40,8 +43,27 @@ public class MatrixOperations {
      * @return matrix with sorted columns
      */
     public static int[][] sortColumns(int[][] matrix) {
-
-
+        transpose(matrix);
+        Arrays.sort(matrix, Comparator.comparingInt(o -> o[0]));
+        transpose(matrix);
         return matrix;
+    }
+
+
+    /**
+     * Transpose matrix
+     * @param matrix 2D array to be transposed
+     */
+    public static void transpose(int[][] matrix) {
+        int swapBuffer;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = i; j < matrix.length; j++) {
+                if (i != j) {
+                    swapBuffer = matrix[i][j];
+                    matrix[i][j] = matrix[j][i];
+                    matrix[j][i] = swapBuffer;
+                }
+            }
+        }
     }
 }
