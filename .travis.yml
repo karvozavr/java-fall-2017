@@ -1,3 +1,4 @@
 language: java
 sudo: false
+before_install: cd project
 script: mvn clean verify
