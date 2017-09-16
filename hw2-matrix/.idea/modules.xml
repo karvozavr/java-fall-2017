@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/hw2-matrix.iml" filepath="$PROJECT_DIR$/.idea/modules/hw2-matrix.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-902459541/hw2-matrix_main.iml" filepath="$PROJECT_DIR$/.idea/modules/-902459541/hw2-matrix_main.iml" group="hw2-matrix" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-902459541/hw2-matrix_test.iml" filepath="$PROJECT_DIR$/.idea/modules/-902459541/hw2-matrix_test.iml" group="hw2-matrix" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-902459541/java-fall-2017-hw2-matrix.iml" filepath="$PROJECT_DIR$/.idea/modules/-902459541/java-fall-2017-hw2-matrix.iml" />
+    </modules>
+  </component>
+</project>
