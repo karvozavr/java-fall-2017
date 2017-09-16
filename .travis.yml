@@ -1,4 +1,4 @@
 language: java
 sudo: false
-before_install: cd project
+before_install: cd hw2-matrix 
 script: mvn clean verify
