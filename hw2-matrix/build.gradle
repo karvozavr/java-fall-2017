@@ -9,6 +9,7 @@ repositories {
     mavenCentral()
 }
 
+
 buildscript {
     repositories {
         mavenCentral()
@@ -19,7 +20,9 @@ buildscript {
     }
 }
 
+
 apply plugin: 'org.junit.platform.gradle.plugin'
+
 
 dependencies {
     testCompile("org.junit.jupiter:junit-jupiter-api:5.0.0")
