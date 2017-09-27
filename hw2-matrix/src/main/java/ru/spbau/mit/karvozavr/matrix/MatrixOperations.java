@@ -11,7 +11,7 @@ import java.util.Comparator;
 /**
  * Some very important operations with matrices
  */
-public class MatrixOperations {
+public static class MatrixOperations {
 
     /**
      * Output matrix in a spiral way
