@@ -20,6 +20,7 @@ public class HashTable implements Cloneable {
      * при достижении размера хеш-таблицы суммарной средней емкости списков производится расширение
      */
     private final int averageListCapacity = 8;
+    private final int initialCapacity = 2;
 
     /**
      * @value Массив списков хеш-таблицы
@@ -28,7 +29,7 @@ public class HashTable implements Cloneable {
 
     public HashTable() {
         size = 0;
-        capacity = 2;
+        capacity = initialCapacity;
         table = new LinkedList[capacity];
         for (int i = 0; i < table.length; i++) {
             table[i] = new LinkedList();
@@ -95,6 +96,7 @@ public class HashTable implements Cloneable {
      * очистить хеш-таблицу
      */
     public void clear() {
+        capacity = initialCapacity;
         table = new LinkedList[capacity];
         for (int i = 0; i < table.length; i++) {
             table[i] = new LinkedList();
@@ -116,7 +118,11 @@ public class HashTable implements Cloneable {
     private void resize() {
         capacity *= 2;
         LinkedList[] oldTable = table;
-        clear();
+        table = new LinkedList[capacity];
+        for (int i = 0; i < table.length; i++) {
+            table[i] = new LinkedList();
+        }
+        size = 0;
 
         for (LinkedList list : oldTable) {
             for (String key : list) {

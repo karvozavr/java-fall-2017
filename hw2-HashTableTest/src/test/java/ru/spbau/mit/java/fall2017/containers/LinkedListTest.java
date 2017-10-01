@@ -30,7 +30,7 @@ class LinkedListTest {
     @Test
     void testGetByKeyNull() {
         LinkedList list = new LinkedList();
-        assertEquals(null, list.getByKey("key"));
+        assertNull(list.getByKey("key"));
     }
 
     @Test
@@ -39,7 +39,7 @@ class LinkedListTest {
         String key = "This is key.";
         String value = "This is value.";
         list.add(key, value);
-        assertEquals(null, list.getByKey("Not a key"));
+        assertNull(list.getByKey("Not a key"));
     }
 
     @Test
@@ -64,7 +64,7 @@ class LinkedListTest {
     @Test
     void TestRemoveByKeyNull() {
         LinkedList list = new LinkedList();
-        assertEquals(null, list.removeByKey("key"));
+        assertNull(list.removeByKey("key"));
     }
 
     @Test
@@ -74,6 +74,6 @@ class LinkedListTest {
         String value = "value";
         list.add(key, value);
         assertEquals(value, list.removeByKey(key));
-        assertEquals(null, list.removeByKey(key));
+        assertNull(list.removeByKey(key));
     }
 }

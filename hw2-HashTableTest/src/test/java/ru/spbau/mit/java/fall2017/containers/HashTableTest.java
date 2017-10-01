@@ -26,7 +26,7 @@ class HashTableTest {
         String key = "key";
         table.put(key, "value");
         for (int i = 0; i < 8; i++) {
-            assertEquals(true, table.contains(key));
+            assertTrue(table.contains(key));
         }
     }
 
@@ -34,7 +34,7 @@ class HashTableTest {
     void testContainsNegative() {
         HashTable table = new HashTable();
         for (int i = 0; i < 8; i++) {
-            assertEquals(false, table.contains("key"));
+            assertFalse(table.contains("key"));
         }
     }
 
@@ -43,15 +43,15 @@ class HashTableTest {
         HashTable table = new HashTable();
         String key = "key";
         table.put(key, "value");
-        assertEquals(true, table.contains(key));
-        assertEquals(false, table.contains("Other key."));
+        assertTrue(table.contains(key));
+        assertFalse(table.contains("Other key."));
     }
 
     @Test
     void testGetNull() {
         HashTable table = new HashTable();
         for (int i = 0; i < 8; i++) {
-            assertEquals(null, table.get("key"));
+            assertNull(table.get("key"));
         }
     }
 
@@ -63,7 +63,7 @@ class HashTableTest {
         table.put(key, value);
         for (int i = 0; i < 8; i++) {
             assertEquals(value, table.get("key"));
-            assertEquals(null, table.get("Other key"));
+            assertNull(table.get("Other key"));
         }
     }
 
@@ -73,9 +73,9 @@ class HashTableTest {
         String key = "key";
         String value = "value";
         table.put(key, value);
-        assertEquals(true, table.contains(key));
+        assertTrue(table.contains(key));
         assertEquals(value, table.get(key));
-        assertEquals(false, table.contains("Other key."));
+        assertFalse(table.contains("Other key."));
     }
 
     @Test
@@ -84,7 +84,7 @@ class HashTableTest {
         String key = "key";
         table.put(key, "value");
         assertEquals("value", table.put(key, "value2"));
-        assertEquals(true, table.contains(key));
+        assertTrue(table.contains(key));
         assertEquals("value2", table.get(key));
     }
 
@@ -94,7 +94,7 @@ class HashTableTest {
         String key = "key";
         table.put(key, "value");
         assertEquals("value", table.remove(key));
-        assertEquals(false, table.contains(key));
+        assertFalse(table.contains(key));
     }
 
     @Test
@@ -102,8 +102,8 @@ class HashTableTest {
         HashTable table = new HashTable();
         String key = "key";
         table.put(key, "value");
-        assertEquals(null, table.remove("other key"));
-        assertEquals(true, table.contains(key));
+        assertNull(table.remove("other key"));
+        assertTrue(table.contains(key));
     }
 
     @Test
@@ -115,7 +115,7 @@ class HashTableTest {
         table.clear();
         assertEquals(0, table.size());
         for (int i = 0; i < 100; i++) {
-            assertEquals(false, table.contains("key" + i));
+            assertFalse(table.contains("key" + i));
         }
     }
 

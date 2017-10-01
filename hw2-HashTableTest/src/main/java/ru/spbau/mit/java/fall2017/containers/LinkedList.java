@@ -10,11 +10,6 @@ public class LinkedList implements Iterable<String> {
     private Node head;
     private Node tail;
 
-    public LinkedList() {
-        head = null;
-        tail = null;
-    }
-
     /**
      * Добавить элемент - пару "ключ-значение" в список.
      *
@@ -29,9 +24,9 @@ public class LinkedList implements Iterable<String> {
                 head = new Node(key, value);
                 tail = head;
             } else {
-                Node new_tail = new Node(key, value, null, tail);
-                tail.setNext(new_tail);
-                tail = new_tail;
+                Node newTail = new Node(key, value, null, tail);
+                tail.setNext(newTail);
+                tail = newTail;
             }
         }
 
@@ -116,7 +111,7 @@ public class LinkedList implements Iterable<String> {
         return new LinkedListIterator(this);
     }
 
-    public class LinkedListIterator implements Iterator<String> {
+    public static class LinkedListIterator implements Iterator<String> {
 
         private Node currentNode;
 
@@ -144,7 +139,7 @@ public class LinkedList implements Iterable<String> {
     /**
      * List node.
      */
-    private class Node {
+    private static class Node {
         private Node next;
         private Node prev;
 
