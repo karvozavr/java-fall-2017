@@ -1,5 +1,5 @@
 language: java
 sudo: false
-before_install: cd hw2-HashTableTest 
+before_install: cd hw3-Trie 
 script: gradle clean check
 
