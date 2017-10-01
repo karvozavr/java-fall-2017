@@ -10,6 +10,13 @@ public class Trie implements Serializable {
     private Node root;
 
     /**
+     * Create empty Trie.
+     */
+    Trie() {
+        root = new Node();
+    }
+
+    /**
      * Build Trie from String array.
      *
      * @param strings to be added to the Trie.
@@ -67,6 +74,24 @@ public class Trie implements Serializable {
     }
 
     /**
+     * Check, if prefix exist in the Trie in O(|prefix|) time.
+     *
+     * @param prefix to find in Trie.
+     * @return true, if this prefix exist in Trie.
+     */
+    public boolean containsPrefix(String prefix) {
+        Node node = root;
+        for (char c : prefix.toCharArray()) {
+            node = node.getChild(c);
+            if (node == null) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Remove element, if it exist in Trie in O(|element|) time.
      *
      * @param element to remove from Trie.
@@ -82,6 +107,7 @@ public class Trie implements Serializable {
             node.startsWithThisPrefix--;
             if (node.getChild(c).startsWithThisPrefix <= 1) {
                 node.removeChild(c);
+                size--;
                 return true;
             }
             node = node.getChild(c);
@@ -109,7 +135,7 @@ public class Trie implements Serializable {
      * @return amount of elements, that start with given prefix.
      */
     int howManyStartsWithPrefix(String prefix) {
-        if (contains(prefix)) {
+        if (containsPrefix(prefix)) {
             Node node = root;
             for (char c : prefix.toCharArray()) {
                 node = node.getChild(c);

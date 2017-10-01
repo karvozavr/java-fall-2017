@@ -119,11 +119,11 @@ class TrieTest {
                 "other string"
         };
         Trie trie = new Trie(strings);
-        assertTrue(trie.contains_prefix("some"));
-        assertTrue(trie.contains_prefix("other"));
-        assertTrue(trie.contains_prefix(""));
-        assertFalse(trie.contains_prefix("no"));
-        assertFalse(trie.contains_prefix("some string with addition"));
+        assertTrue(trie.containsPrefix("some"));
+        assertTrue(trie.containsPrefix("other"));
+        assertTrue(trie.containsPrefix(""));
+        assertFalse(trie.containsPrefix("no"));
+        assertFalse(trie.containsPrefix("some string with addition"));
     }
 
     @Test
