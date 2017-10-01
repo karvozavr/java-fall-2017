@@ -168,7 +168,7 @@ public class Trie implements Serializable {
         }
     }
 
-    private class Node {
+    private static class Node {
         private HashMap<Character, Node> children;
         private int startsWithThisPrefix = 0;
         private boolean isTerminating = false;
