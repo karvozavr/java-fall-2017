@@ -143,29 +143,6 @@ class TrieTest {
     }
 
     @Test
-    void testSerialize() {
-        String strings[] = {
-                "some string",
-                "other string",
-                "some same prefix string",
-                "just a string",
-                "some more string"
-        };
-        OutputStream outputStream = new ByteArrayOutputStream();
-        Trie trie = new Trie(strings);
-        try {
-            trie.serialize(outputStream);
-        } catch (Exception e) {
-            throw new Error("There has to be no exception, something went very wrong!");
-        }
-        String check[] = outputStream.toString().split("\n");
-        assertEquals(strings.length, check.length);
-        for (String s : check) {
-            assertTrue(trie.contains(s));
-        }
-    }
-
-    @Test
     void testDeserialize() {
         String strings[] = {
                 "some string",
@@ -195,5 +172,35 @@ class TrieTest {
         for (String s : strings) {
             assertTrue(trie2.contains(s));
         }
+    }
+
+    @Test
+    void testSerialize() {
+        String strings[] = {
+                "some string",
+                "other string",
+                "some same prefix string",
+                "just a string",
+                "some more string"
+        };
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        Trie trie = new Trie(strings);
+        try {
+            trie.serialize(outputStream);
+        } catch (Exception e) {
+            throw new Error("There has to be no exception, something went very wrong!");
+        }
+
+        InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+
+        Trie trie2 = new Trie();
+        try {
+            trie2.deserialize(inputStream);
+        } catch (Exception e) {
+            throw new Error("There has to be no exception, something went very wrong!");
+        }
+
+        trie.add("NOPE");
+        assertFalse(trie2.contains("NOPE"));
     }
 }

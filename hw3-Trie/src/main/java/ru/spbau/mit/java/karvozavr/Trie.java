@@ -153,13 +153,8 @@ public class Trie implements Serializable {
      * @throws IOException because of internal calls
      */
     public void serialize(OutputStream out) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out))) {
-            ArrayList<String> strings = new ArrayList<>();
-            dfs(root, new StringBuilder(), strings);
-            for (String element : strings) {
-                writer.write(element);
-                writer.newLine();
-            }
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(out)) {
+            outputStream.writeObject(this);
         }
     }
 
@@ -169,32 +164,17 @@ public class Trie implements Serializable {
      * @throws IOException because of internal calls
      */
     public void deserialize(InputStream in) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                add(line);
-            }
+        try (ObjectInputStream inputStream = new ObjectInputStream(in)) {
+            Trie newTrie = (Trie)inputStream.readObject();
+            this.root = newTrie.root;
+            this.size = newTrie.size;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            System.err.println("This is not normal not to find class!");
         }
     }
 
-    /**
-     * Dfs to take all the elements from the Trie and put them to ArrayList.
-     * @param node of Trie
-     * @param currentString string, that DFS has on current step
-     * @param strings array to put found strings to
-     */
-    private void dfs(Node node, StringBuilder currentString, ArrayList<String> strings) {
-        if (node.isTerminating) {
-            strings.add(currentString.toString());
-        }
-        for (char c : node.children.keySet()) {
-            currentString.append(c);
-            dfs(node.getChild(c), currentString, strings);
-            currentString.setLength(currentString.length() - 1);
-        }
-    }
-
-    private static class Node {
+    private static class Node implements Serializable {
         private HashMap<Character, Node> children;
         private int startsWithThisPrefix = 0;
         private boolean isTerminating = false;
