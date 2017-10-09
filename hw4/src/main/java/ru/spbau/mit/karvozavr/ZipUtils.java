@@ -17,7 +17,7 @@ public class ZipUtils {
         try (final FileSystem fileSystem = FileSystems.newFileSystem(zipFile, null)) {
             PathMatcher matcher = fileSystem.getPathMatcher("regex:" + regex);
 
-            try (Stream<Path> archiveRoot = Files.walk(fileSystem.getRootDirectories().iterator().next())) {
+            try (final Stream<Path> archiveRoot = Files.walk(fileSystem.getRootDirectories().iterator().next())) {
                 archiveRoot.filter(file -> !Files.isDirectory(file))
                         .filter(matcher::matches)
                         .forEach(file -> {
@@ -39,7 +39,7 @@ public class ZipUtils {
      * @throws IOException in case of some troubles with files
      */
     public static void extractByRegex(String path, String regex) throws IOException {
-        try (Stream<Path> directory = Files.walk(Paths.get(path))) {
+        try (final Stream<Path> directory = Files.walk(Paths.get(path))) {
             directory
                     .filter(Files::isRegularFile)
                     .filter(file -> !file.getFileName().toString().endsWith(".zip"))
