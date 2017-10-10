@@ -1,5 +1,6 @@
 package ru.spbau.mit.karvozavr;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.stream.Stream;
@@ -13,16 +14,16 @@ public class ZipUtils {
      * @param regex   regular expression to match
      * @throws IOException in case of some troubles with files
      */
-    private static void extractByRegexFromArchive(Path zipFile, String regex) throws IOException {
+    public static void extractByRegexFromArchive(Path zipFile, String regex, Path baseDirectory) throws IOException {
         try (final FileSystem fileSystem = FileSystems.newFileSystem(zipFile, null)) {
             PathMatcher matcher = fileSystem.getPathMatcher("regex:" + regex);
 
             try (final Stream<Path> archiveRoot = Files.walk(fileSystem.getRootDirectories().iterator().next())) {
                 archiveRoot.filter(file -> !Files.isDirectory(file))
-                        .filter(matcher::matches)
+                        .filter(file -> matcher.matches(file.getFileName()))
                         .forEach(file -> {
                             try {
-                                Files.copy(file, Paths.get(file.getFileName().toString()));
+                                Files.copy(file, Paths.get(baseDirectory.getFileName().toString(), file.getFileName().toString()));
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -38,14 +39,14 @@ public class ZipUtils {
      * @param regex regular expression to match
      * @throws IOException in case of some troubles with files
      */
-    public static void extractByRegex(String path, String regex) throws IOException {
+    public static void extractByRegex(String path, String regex, String baseDirectoryName) throws IOException {
         try (final Stream<Path> directory = Files.walk(Paths.get(path))) {
             directory
-                    .filter(Files::isRegularFile)
-                    .filter(file -> !file.getFileName().toString().endsWith(".zip"))
+                    .filter(file -> !Files.isDirectory(file))
+                    .filter(file -> file.getFileName().toString().endsWith(".zip"))
                     .forEach(archive -> {
                         try {
-                            extractByRegexFromArchive(archive, regex);
+                            extractByRegexFromArchive(archive, regex, Paths.get(baseDirectoryName));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

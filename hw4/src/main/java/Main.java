@@ -10,7 +10,7 @@ public class Main {
      */
     public static void main(String[] args) throws IOException {
         try {
-            ZipUtils.extractByRegex(args[0], args[1]);
+            ZipUtils.extractByRegex(args[0], args[1], System.getProperty("user.dir"));
         } catch (IOException e) {
             System.err.println("Something has terribly crashed in IO.");
             throw e;
