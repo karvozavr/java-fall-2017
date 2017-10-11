@@ -1,6 +1,7 @@
+import java.security.KeyStore;
 import java.util.*;
 
-public class LinkedHashMap<K, V> extends AbstractMap<K, V> {
+public class LinkedHashMap<K extends Comparable<K>, V extends Comparable<V>> extends AbstractMap<K, V> {
 
     /**
      * @value количество ключей в хеш-таблице
@@ -20,6 +21,8 @@ public class LinkedHashMap<K, V> extends AbstractMap<K, V> {
 
     private final int initialCapacity = 10;
 
+    private LinkedList entries;
+
     /**
      * @value Массив списков хеш-таблицы
      */
@@ -31,6 +34,36 @@ public class LinkedHashMap<K, V> extends AbstractMap<K, V> {
         capacity = initialCapacity;
     }
 
+    private static class LinkedHashMapEntry<EntryK extends Comparable<EntryK>, EntryV extends Comparable<EntryV>> implements Entry<EntryK, EntryV> {
+
+        private EntryK key;
+        private EntryV value;
+
+        LinkedHashMapEntry(EntryK key, EntryV value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        @Override
+        public EntryK getKey() {
+            return key;
+        }
+
+        @Override
+        public EntryV getValue() {
+            return value;
+        }
+
+        @Override
+        public EntryV setValue(EntryV value) {
+            EntryV oldValue = this.value;
+            this.value = value;
+            return oldValue;
+        }
+    }
+
+
+    @Override
     public V put(K key, V value) {
         Entry<K,V> entry = findEntryInList(key, table[getIndex(key)]);
         if (entry != null) {
@@ -38,7 +71,20 @@ public class LinkedHashMap<K, V> extends AbstractMap<K, V> {
             entry.setValue(value);
             return oldValue;
         } else {
+            Entry newEntry = new LinkedHashMapEntry<K, V>(key, value);
+            table[getIndex(key)].push(newEntry);
+            entries.push(newEntry);
+            return null;
+        }
+    }
 
+    @Override
+    public V get(Object key) {
+        Entry<K,V> entry = findEntryInList(key, table[getIndex(key)]);
+        if (entry != null) {
+            return entry.getValue();
+        } else {
+            return null;
         }
     }
 
@@ -57,10 +103,19 @@ public class LinkedHashMap<K, V> extends AbstractMap<K, V> {
         return null;
     }
 
-
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return null;
+        return new AbstractSet<Entry<K, V>>() {
+            @Override
+            public Iterator<Entry<K, V>> iterator() {
+                return null;
+            }
+
+            @Override
+            public int size() {
+                return 0;
+            }
+        };
     }
 
     @Override
