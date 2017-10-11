@@ -1,5 +1,11 @@
 import java.util.*;
 
+
+/**
+ * Linked hashMap class
+ * @param <K>
+ * @param <V>
+ */
 public class LinkedHashMap<K extends Comparable<K>, V extends Comparable<V>> extends AbstractMap<K, V> {
 
     private int size;
@@ -23,9 +29,14 @@ public class LinkedHashMap<K extends Comparable<K>, V extends Comparable<V>> ext
         capacity = initialCapacity;
     }
 
+    /**
+     * Linked HashMap entry
+     * @param <EntryK> key type
+     * @param <EntryV> value type
+     */
     private static class LinkedHashMapEntry<EntryK extends Comparable<EntryK>, EntryV extends Comparable<EntryV>> implements Entry<EntryK, EntryV> {
 
-        private EntryK key;
+        private final EntryK key;
         private EntryV value;
 
         LinkedHashMapEntry(EntryK key, EntryV value) {
