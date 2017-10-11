@@ -3,8 +3,8 @@ import java.util.*;
 
 /**
  * Linked hashMap class
- * @param <K>
- * @param <V>
+ * @param <K> key type
+ * @param <V> value type
  */
 public class LinkedHashMap<K extends Comparable<K>, V extends Comparable<V>> extends AbstractMap<K, V> {
 
@@ -63,6 +63,12 @@ public class LinkedHashMap<K extends Comparable<K>, V extends Comparable<V>> ext
     }
 
 
+    /**
+     * put new entry to HashTable
+     * @param key key
+     * @param value value
+     * @return
+     */
     @Override
     public V put(K key, V value) {
         Entry<K, V> entry = findEntryInList(key, table[getIndex(key)]);
