@@ -1,35 +1,24 @@
-import java.security.KeyStore;
 import java.util.*;
 
 public class LinkedHashMap<K extends Comparable<K>, V extends Comparable<V>> extends AbstractMap<K, V> {
 
-    /**
-     * @value количество ключей в хеш-таблице
-     */
     private int size;
 
-    /**
-     * @value количество списков в хеш-таблице
-     */
     private int capacity;
 
-    /**
-     * @value средняя емкость списка хеш-таблицы
-     * при достижении размера хеш-таблицы суммарной средней емкости списков производится расширение
-     */
     private final int averageListCapacity = 10;
 
     private final int initialCapacity = 10;
 
     private LinkedList entries;
 
-    /**
-     * @value Массив списков хеш-таблицы
-     */
     private LinkedList[] table;
 
     LinkedHashMap() {
         table = new LinkedList[capacity];
+        for (int i = 0; i < table.length; i++) {
+            table[i] = new LinkedList();
+        }
         size = 0;
         capacity = initialCapacity;
     }
@@ -65,22 +54,48 @@ public class LinkedHashMap<K extends Comparable<K>, V extends Comparable<V>> ext
 
     @Override
     public V put(K key, V value) {
-        Entry<K,V> entry = findEntryInList(key, table[getIndex(key)]);
+        Entry<K, V> entry = findEntryInList(key, table[getIndex(key)]);
         if (entry != null) {
             V oldValue = entry.getValue();
             entry.setValue(value);
             return oldValue;
         } else {
+            if (size * averageListCapacity == capacity) {
+                rehash();
+            }
             Entry newEntry = new LinkedHashMapEntry<K, V>(key, value);
             table[getIndex(key)].push(newEntry);
             entries.push(newEntry);
+            size++;
             return null;
         }
     }
 
+    public void clear() {
+        table = new LinkedList[capacity];
+        for (int i = 0; i < table.length; i++) {
+            table[i] = new LinkedList();
+        }
+
+        size = 0;
+    }
+
+    private void rehash() {
+        capacity *= 2;
+        LinkedList[] oldTable = table;
+        clear();
+
+        for (LinkedList<Entry<K, V>> list : oldTable) {
+            for (Entry<K, V> entry : list) {
+                put(entry.getKey(), entry.getValue());
+            }
+        }
+    }
+
+
     @Override
     public V get(Object key) {
-        Entry<K,V> entry = findEntryInList(key, table[getIndex(key)]);
+        Entry<K, V> entry = findEntryInList(key, table[getIndex(key)]);
         if (entry != null) {
             return entry.getValue();
         } else {
@@ -108,12 +123,12 @@ public class LinkedHashMap<K extends Comparable<K>, V extends Comparable<V>> ext
         return new AbstractSet<Entry<K, V>>() {
             @Override
             public Iterator<Entry<K, V>> iterator() {
-                return null;
+                return entries.iterator();
             }
 
             @Override
             public int size() {
-                return 0;
+                return size;
             }
         };
     }
