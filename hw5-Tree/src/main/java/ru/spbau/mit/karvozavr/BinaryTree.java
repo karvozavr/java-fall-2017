@@ -33,6 +33,7 @@ public class BinaryTree<T extends Comparable<T>> {
     public void add(@NotNull T element) {
         if (root == null) {
             root = new Node<>(element);
+            ++size;
             return;
         }
         Node<T> node = root;
