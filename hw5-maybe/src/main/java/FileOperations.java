@@ -12,7 +12,8 @@ public class FileOperations {
 
     /**
      * Get all the numbers from the input file and save them squared to the output file.
-     * @param inputFileName input file name
+     *
+     * @param inputFileName  input file name
      * @param outputFileName output file name
      */
     public static void squareNumbers(@NotNull String inputFileName, @NotNull String outputFileName) {
@@ -21,10 +22,13 @@ public class FileOperations {
             lines
                     .map(FileOperations::parseIntToMaybe)
                     .map(x -> x.map(a -> a * a))
-                    .filter(Maybe::isPresent)
                     .forEach(x -> {
                         try {
-                            outStream.println(x.get());
+                            if (x.isPresent()) {
+                                outStream.println(x.get());
+                            } else {
+                                outStream.println("null");
+                            }
                         } catch (MaybeIsNothingException e) {
                             System.err.println("There has to be no exceptions!");
                         }
@@ -36,6 +40,7 @@ public class FileOperations {
 
     /**
      * Parse int to Maybe
+     *
      * @param s input string
      * @return parsed Just value or Nothing
      */

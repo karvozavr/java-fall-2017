@@ -1,5 +1,6 @@
 package ru.spbau.mit.java.karvozavr.maybe;
 
+import org.jetbrains.annotations.Contract;
 import ru.spbau.mit.java.karvozavr.maybe.exception.MaybeIsNothingException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +24,7 @@ public class Maybe<U> {
      * Initialize value. Constructs correct Maybe.
      * @param t value
      */
-    private Maybe(U t) {
+    private Maybe(@Nullable U t) {
         value = t;
     }
 
@@ -56,7 +57,7 @@ public class Maybe<U> {
      * @return new Maybe that stores result of a function
      */
     @NotNull
-    public <T> Maybe<T> map(Function<U, T> mapper) {
+    public <T> Maybe<T> map(@NotNull Function<U, T> mapper) {
         if (isPresent()) {
             return just(mapper.apply(value));
         } else {

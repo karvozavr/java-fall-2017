@@ -1,3 +1,4 @@
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
@@ -13,14 +14,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class FileOperationsTest {
 
     @Test
-    void testSquareNumbersSmoke() {
-        String data[] = {"1", "22", "12", "aaaaa"};
+    void testSquareNumbersBase() {
+        String data[] = {"1", " ", "22", "", "12", "aaa", "12kele", "12___0", "lol", "2212312"};
         squareNumbersHelper(data);
     }
 
     @Test
-    void testSquareNumbersBase() {
-        String data[] = {"1", "\n", " ", "22", "", "12", "aaaaa", "12keke", "12___0", "lol", "00000002212312"};
+    void testSquareNumbersSmoke() {
+        String data[] = {"1", "22", "12", "aaaaa"};
         squareNumbersHelper(data);
     }
 
@@ -37,20 +38,12 @@ class FileOperationsTest {
         }
 
         Object numbers[] = Arrays.stream(data)
-                .filter(s -> {
-                    try {
-                        int value = Integer.parseInt(s);
-                        return true;
-                    } catch (NumberFormatException e) {
-                        return false;
-                    }
-                })
                 .map(s -> {
                     try {
                         int value = Integer.parseInt(s);
                         return Integer.toString(value * value);
                     } catch (NumberFormatException e) {
-                        return false;
+                        return "null";
                     }
                 }).toArray();
 
@@ -67,6 +60,12 @@ class FileOperationsTest {
         } catch (IOException e) {
             fail(e);
         }
+    }
+
+    @AfterEach
+    void cleanUp() throws IOException {
+        Files.deleteIfExists(Paths.get("file.in"));
+        Files.deleteIfExists(Paths.get("file.out"));
     }
 
 }
