@@ -1,8 +1,6 @@
 package ru.spbau.mit.karvozavr.matrix;
 
-
 import java.io.BufferedWriter;
-import java.io.IOError;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Arrays;
@@ -57,16 +55,14 @@ public final class MatrixOperations {
      * @param matrix 2-dimensional array
      * @return matrix with sorted columns
      */
-    public static int[][] sortColumns(int[][] matrix) {
+    public static void sortColumns(int[][] matrix) {
         if (matrix == null) {
-            return null;
+            return;
         }
         transpose(matrix);
         Arrays.sort(matrix, Comparator.comparingInt(o -> o[0]));
         transpose(matrix);
-        return matrix;
     }
-
 
     /**
      * Transpose matrix
@@ -76,10 +72,11 @@ public final class MatrixOperations {
         if (matrix == null) {
             return;
         }
-        int swapBuffer;
+
         for (int i = 0; i < matrix.length; i++) {
             for (int j = i; j < matrix.length; j++) {
                 if (i != j) {
+                    int swapBuffer;
                     swapBuffer = matrix[i][j];
                     matrix[i][j] = matrix[j][i];
                     matrix[j][i] = swapBuffer;

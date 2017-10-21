@@ -1,10 +1,8 @@
 package ru.spbau.mit.karvozavr.matrix;
 
 import org.junit.jupiter.api.Test;
-
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class MatrixOperationsTest {
@@ -58,7 +56,6 @@ class MatrixOperationsTest {
         int[][] matrix = null;
         assertEquals("", MatrixOperations.spiralOutput(matrix));
     }
-
 
     @Test
     void testSortColumnsSmoke() {
