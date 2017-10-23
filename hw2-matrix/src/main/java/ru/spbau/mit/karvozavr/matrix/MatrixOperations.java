@@ -20,6 +20,9 @@ public final class MatrixOperations {
         if (matrix == null) {
             return "";
         }
+
+        checkMatrix(matrix);
+
         final int N = matrix.length;
         StringWriter stringWriter = new StringWriter();
         try (BufferedWriter outputWriter = new BufferedWriter(stringWriter)) {
@@ -59,9 +62,24 @@ public final class MatrixOperations {
         if (matrix == null) {
             return;
         }
+
+        checkMatrix(matrix);
+
         transpose(matrix);
         Arrays.sort(matrix, Comparator.comparingInt(o -> o[0]));
         transpose(matrix);
+    }
+
+    /**
+     * Checks if matrix is square
+     * @param matrix input matrix
+     */
+    private static void checkMatrix(int[][] matrix) {
+        for (int[] line : matrix) {
+            if (line.length != matrix.length) {
+                throw new IllegalArgumentException("Matrix is not square!");
+            }
+        }
     }
 
     /**
@@ -73,11 +91,12 @@ public final class MatrixOperations {
             return;
         }
 
+        checkMatrix(matrix);
+
         for (int i = 0; i < matrix.length; i++) {
             for (int j = i; j < matrix.length; j++) {
                 if (i != j) {
-                    int swapBuffer;
-                    swapBuffer = matrix[i][j];
+                    int swapBuffer = matrix[i][j];
                     matrix[i][j] = matrix[j][i];
                     matrix[j][i] = swapBuffer;
                 }

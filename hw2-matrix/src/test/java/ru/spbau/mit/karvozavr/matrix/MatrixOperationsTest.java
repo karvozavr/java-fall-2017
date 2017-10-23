@@ -31,6 +31,14 @@ class MatrixOperationsTest {
     }
 
     @Test
+    void testTransposeIllegalArgument() {
+        int[][] matrix = {{1, 2, 3}, {1, 2, 3}};
+        assertThrows(IllegalArgumentException.class, () -> MatrixOperations.transpose(matrix));
+        int[][] otherMatrix = {{1, 2}, {1, 2, 3}, {3}};
+        assertThrows(IllegalArgumentException.class, () -> MatrixOperations.transpose(otherMatrix));
+    }
+
+    @Test
     void testSpiralOutputSmoke() {
         int[][] matrix = {{1}};
         assertEquals("1", MatrixOperations.spiralOutput(matrix));
@@ -45,6 +53,14 @@ class MatrixOperationsTest {
                 {17, 16, 15, 14, 13}};
         assertEquals(IntStream.rangeClosed(1, 25).mapToObj(Integer::toString).collect(Collectors.joining()),
                 MatrixOperations.spiralOutput(matrix));
+    }
+
+    @Test
+    void testSpiralOutputIllegalArgument() {
+        int[][] matrix = {{1, 2, 3}, {1, 2, 3}};
+        assertThrows(IllegalArgumentException.class, () -> MatrixOperations.spiralOutput(matrix));
+        int[][] otherMatrix = {{1, 2}, {1, 2, 3}, {3}};
+        assertThrows(IllegalArgumentException.class, () -> MatrixOperations.spiralOutput(otherMatrix));
     }
 
     /**
@@ -83,5 +99,13 @@ class MatrixOperationsTest {
         int[][] expected = null;
         MatrixOperations.sortColumns(matrix);
         assertArrayEquals(expected, matrix);
+    }
+
+    @Test
+    void testSortColumnsIllegalArgument() {
+        int[][] matrix = {{1, 2, 3}, {1, 2, 3}};
+        assertThrows(IllegalArgumentException.class, () -> MatrixOperations.sortColumns(matrix));
+        int[][] otherMatrix = {{1, 2}, {1, 2, 3}, {3}};
+        assertThrows(IllegalArgumentException.class, () -> MatrixOperations.sortColumns(otherMatrix));
     }
 }
