@@ -3,6 +3,7 @@ package ru.spbau.mit.java.karvozavr;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class TrieTest {
@@ -143,7 +144,7 @@ class TrieTest {
     }
 
     @Test
-    void testDeserialize() {
+    void testDeserialize() throws IOException {
         String strings[] = {
                 "some string",
                 "other string",
@@ -151,22 +152,15 @@ class TrieTest {
                 "just a string",
                 "some more string"
         };
+
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         Trie trie = new Trie(strings);
-        try {
-            trie.serialize(outputStream);
-        } catch (Exception e) {
-            throw new Error("There has to be no exception, something went very wrong!");
-        }
+        trie.serialize(outputStream);
 
         InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
 
         Trie trie2 = new Trie();
-        try {
-            trie2.deserialize(inputStream);
-        } catch (Exception e) {
-            throw new Error("There has to be no exception, something went very wrong!");
-        }
+        trie2.deserialize(inputStream);
 
         assertEquals(5, trie2.size());
         for (String s : strings) {
@@ -175,7 +169,7 @@ class TrieTest {
     }
 
     @Test
-    void testSerialize() {
+    void testSerialize() throws IOException {
         String strings[] = {
                 "some string",
                 "other string",
@@ -185,20 +179,14 @@ class TrieTest {
         };
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         Trie trie = new Trie(strings);
-        try {
-            trie.serialize(outputStream);
-        } catch (Exception e) {
-            throw new Error("There has to be no exception, something went very wrong!");
-        }
+        trie.serialize(outputStream);
+
 
         InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
 
         Trie trie2 = new Trie();
-        try {
-            trie2.deserialize(inputStream);
-        } catch (Exception e) {
-            throw new Error("There has to be no exception, something went very wrong!");
-        }
+        trie2.deserialize(inputStream);
+
 
         trie.add("NOPE");
         assertFalse(trie2.contains("NOPE"));

@@ -6,13 +6,12 @@ import java.util.HashMap;
 
 public class Trie implements Serializable {
 
-    private int size = 0;
     private Node root;
 
     /**
      * Create empty Trie.
      */
-    Trie() {
+    public Trie() {
         root = new Node();
     }
 
@@ -21,7 +20,7 @@ public class Trie implements Serializable {
      *
      * @param strings to be added to the Trie.
      */
-    Trie(String[] strings) {
+    public Trie(String[] strings) {
         root = new Node();
         for (String element : strings) {
             add(element);
@@ -49,8 +48,6 @@ public class Trie implements Serializable {
         }
 
         node.isTerminating = true;
-
-        size++;
 
         return false;
     }
@@ -107,14 +104,12 @@ public class Trie implements Serializable {
             node.startsWithThisPrefix--;
             if (node.getChild(c).startsWithThisPrefix <= 1) {
                 node.removeChild(c);
-                size--;
                 return true;
             }
             node = node.getChild(c);
         }
 
         node.isTerminating = false;
-        size--;
 
         return true;
     }
@@ -125,7 +120,7 @@ public class Trie implements Serializable {
      * @return Size of the Trie.
      */
     public int size() {
-        return size;
+        return root.startsWithThisPrefix;
     }
 
     /**
@@ -145,7 +140,6 @@ public class Trie implements Serializable {
             return 0;
         }
     }
-
 
     /**
      * Put the Trie to the output stream.
@@ -167,7 +161,6 @@ public class Trie implements Serializable {
         try (ObjectInputStream inputStream = new ObjectInputStream(in)) {
             Trie newTrie = (Trie)inputStream.readObject();
             this.root = newTrie.root;
-            this.size = newTrie.size;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             System.err.println("This is not normal not to find class!");
@@ -210,6 +203,10 @@ public class Trie implements Serializable {
             children.remove(key);
         }
 
+        /**
+         * Check if there are children
+         * @return if Node has children
+         */
         public boolean hasChildren() {
             return !children.isEmpty();
         }
