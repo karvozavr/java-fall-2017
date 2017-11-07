@@ -1,0 +1,4 @@
+language: java
+sudo: false
+before_install: cd hw6-FP 
+script: gradle clean check
