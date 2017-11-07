@@ -11,10 +11,11 @@ public class Collections {
 
     /**
      * Map function to array
+     *
      * @param function to map
-     * @param array data
-     * @param <T> input type
-     * @param <R> output type
+     * @param array    data
+     * @param <T>      input type
+     * @param <R>      output type
      * @return array of function results
      */
     @SuppressWarnings("unchecked")
@@ -29,10 +30,11 @@ public class Collections {
 
     /**
      * Filter array by predicate
+     *
      * @param predicate filter
-     * @param array data
-     * @param <T> input type
-     * @param <R> output type
+     * @param array     data
+     * @param <T>       input type
+     * @param <R>       output type
      * @return array of function results
      */
     @SuppressWarnings("unchecked")
@@ -48,10 +50,11 @@ public class Collections {
 
     /**
      * Take while predicate is true
+     *
      * @param predicate filter
-     * @param array data
-     * @param <T> input type
-     * @param <R> output type
+     * @param array     data
+     * @param <T>       input type
+     * @param <R>       output type
      * @return array of function results
      */
     @SuppressWarnings("unchecked")
@@ -70,10 +73,11 @@ public class Collections {
 
     /**
      * Take while predicate is false
+     *
      * @param predicate filter
-     * @param array data
-     * @param <T> input type
-     * @param <R> output type
+     * @param array     data
+     * @param <T>       input type
+     * @param <R>       output type
      * @return array of function results
      */
     @SuppressWarnings("unchecked")
@@ -92,11 +96,12 @@ public class Collections {
 
     /**
      * Fold left <a href="https://en.wikipedia.org/wiki/Fold_(higher-order_function))">Wiki</a>
-     * @param function func
-     * @param initial ini
+     *
+     * @param function   func
+     * @param initial    ini
      * @param collection foldable
-     * @param <T> collection element type
-     * @param <U> return and initial value type
+     * @param <T>        collection element type
+     * @param <U>        return and initial value type
      * @return result of foldl on given collection
      */
     public static <T, U> @NotNull U foldl(@NotNull Function2<? super T, ? super U, ? extends U> function, U initial, @NotNull Collection<T> collection) {
@@ -111,11 +116,12 @@ public class Collections {
 
     /**
      * Fold right <a href="https://en.wikipedia.org/wiki/Fold_(higher-order_function))">Wiki</a>
-     * @param function func
-     * @param initial ini
+     *
+     * @param function   func
+     * @param initial    ini
      * @param collection foldable
-     * @param <T> collection element type
-     * @param <U> return and initial value type
+     * @param <T>        collection element type
+     * @param <U>        return and initial value type
      * @return result of foldr on given collection
      */
     public static <T, U> @NotNull U foldr(@NotNull Function2<? super T, ? super U, ? extends U> function, U initial, @NotNull Collection<T> collection) {
@@ -129,14 +135,17 @@ public class Collections {
 
     /**
      * Fold right implementation <a href="https://en.wikipedia.org/wiki/Fold_(higher-order_function))">Wiki</a>
+     *
      * @param function func
-     * @param initial ini
+     * @param initial  ini
      * @param iterator collection iterator
-     * @param <T> collection element type
-     * @param <U> return and initial value type
+     * @param <T>      collection element type
+     * @param <U>      return and initial value type
      * @return result of foldr on given collection
      */
-    private static <T, U> @NotNull U foldrHelper(@NotNull Function2<? super T, ? super U, ? extends U> function, @NotNull U initial, @NotNull Iterator<T> iterator) {
+    private static <T, U> @NotNull U foldrHelper(@NotNull Function2<? super T, ? super U, ? extends U> function,
+                                                 @NotNull U initial,
+                                                 @NotNull Iterator<T> iterator) {
         if (iterator.hasNext()) {
             return foldrHelper(function, function.apply(iterator.next(), initial), iterator);
         } else {

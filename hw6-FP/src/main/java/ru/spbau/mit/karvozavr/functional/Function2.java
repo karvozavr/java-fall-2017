@@ -18,7 +18,7 @@ public interface Function2<T, U, R> {
      * @param <R2>     return type of g
      * @return function g ○ f
      */
-    default <R2> @NotNull Function2<T, U, R2> compose(@NotNull Function1<R, R2> function) {
+    default  <R2> @NotNull Function2<T, U, R2> compose(@NotNull Function1<R, R2> function) {
         return (argument1, argument2) -> function.apply(Function2.this.apply(argument1, argument2));
     }
 
