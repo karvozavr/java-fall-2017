@@ -4,12 +4,14 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Predicate of one argument
+ *
  * @param <T> type of the argument
  */
 public interface Predicate<T> extends Function1<T, Boolean> {
 
     /**
      * Logical or
+     *
      * @param predicate g
      * @return f or g
      */
@@ -19,6 +21,7 @@ public interface Predicate<T> extends Function1<T, Boolean> {
 
     /**
      * Logical and
+     *
      * @param predicate g
      * @return f and g
      */
@@ -28,6 +31,7 @@ public interface Predicate<T> extends Function1<T, Boolean> {
 
     /**
      * Logical not
+     *
      * @return not f
      */
     default @NotNull Predicate<T> not() {

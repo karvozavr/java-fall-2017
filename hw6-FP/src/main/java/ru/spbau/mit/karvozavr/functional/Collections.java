@@ -96,19 +96,20 @@ public class Collections {
 
     /**
      * Fold left <a href="https://en.wikipedia.org/wiki/Fold_(higher-order_function))">Wiki</a>
+     * foldl :: (b -> a -> b) -> b -> Foldable a -> b
      *
      * @param function   func
      * @param initial    ini
      * @param collection foldable
      * @param <T>        collection element type
-     * @param <U>        return and initial value type
+     * @param <R>        return and initial value type
      * @return result of foldl on given collection
      */
-    public static <T, U> @NotNull U foldl(@NotNull Function2<? super T, ? super U, ? extends U> function, U initial, @NotNull Collection<T> collection) {
+    public static <T, R> @NotNull R foldl(@NotNull Function2<? super R, ? super T, ? extends R> function, R initial, @NotNull Collection<T> collection) {
         Iterator<T> iterator = collection.iterator();
-        U result = initial;
+        R result = initial;
         while (iterator.hasNext()) {
-            result = function.apply(iterator.next(), result);
+            result = function.apply(result, iterator.next());
         }
 
         return result;
@@ -116,15 +117,16 @@ public class Collections {
 
     /**
      * Fold right <a href="https://en.wikipedia.org/wiki/Fold_(higher-order_function))">Wiki</a>
+     * foldr :: (a -> b -> b) -> b -> Foldable a -> b
      *
      * @param function   func
      * @param initial    ini
      * @param collection foldable
      * @param <T>        collection element type
-     * @param <U>        return and initial value type
+     * @param <R>        return and initial value type
      * @return result of foldr on given collection
      */
-    public static <T, U> @NotNull U foldr(@NotNull Function2<? super T, ? super U, ? extends U> function, U initial, @NotNull Collection<T> collection) {
+    public static <T, R> @NotNull R foldr(@NotNull Function2<? super T, ? super R, ? extends R> function, R initial, @NotNull Collection<T> collection) {
         Iterator<T> iterator = collection.iterator();
         if (iterator.hasNext()) {
             return foldrHelper(function, function.apply(iterator.next(), initial), iterator);
