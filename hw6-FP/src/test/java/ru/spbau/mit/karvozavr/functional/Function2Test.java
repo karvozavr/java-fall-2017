@@ -26,6 +26,28 @@ class Function2Test {
 
     @Test
     void testBind1() {
-        Function2<Integer, String, Double> foo = (Integer a, String s) -> a * Double.parseDouble(s);
+        final Function2<Integer, String, Double> foo = (Integer a, String s) -> a * Double.parseDouble(s);
+        final Integer arg1 = 41;
+        final String arg2 = "42.5";
+        final Function2<Object, String, Double> bar = foo.bind1(arg1);
+        assertThat(bar.apply("WTF??", arg2), equalTo(arg1 * Double.parseDouble(arg2)));
+    }
+
+    @Test
+    void testBind2() {
+        final Function2<Integer, String, Double> foo = (Integer a, String s) -> a * Double.parseDouble(s);
+        final Integer arg1 = 41;
+        final String arg2 = "42.5";
+        final Function2<Integer, Object, Double> bar = foo.bind2(arg2);
+        assertThat(bar.apply(arg1, 25.6), equalTo(arg1 * Double.parseDouble(arg2)));
+    }
+
+    @Test
+    void testCurry() {
+        final Function2<Integer, String, Double> foo = (Integer a, String s) -> a * Double.parseDouble(s);
+        final Integer arg1 = 41;
+        final String arg2 = "42.5";
+        final Function1<String, Double> bar = foo.curry(arg1);
+        assertThat(bar.apply(arg2), equalTo(arg1 * Double.parseDouble(arg2)));
     }
 }

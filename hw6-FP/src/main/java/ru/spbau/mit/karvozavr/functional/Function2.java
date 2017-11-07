@@ -28,8 +28,8 @@ public interface Function2<T, U, R> {
      * @param argument to bind
      * @return function f (argument, U)
      */
-    default @NotNull Function2<?, U, R> bind1(T argument) {
-        return (Function2<Object, U, R>) (argument1, argument2) -> Function2.this.apply(argument, argument2);
+    default @NotNull Function2<Object, U, R> bind1(T argument) {
+        return (argument1, argument2) -> Function2.this.apply(argument, argument2);
     }
 
     /**
@@ -38,8 +38,8 @@ public interface Function2<T, U, R> {
      * @param argument to bind
      * @return function f (T, argument)
      */
-    default @NotNull Function2<T, ?, R> bind2(U argument) {
-        return (Function2<T, Object, R>) (argument1, argument2) -> Function2.this.apply(argument1, argument);
+    default @NotNull Function2<T, Object, R> bind2(U argument) {
+        return (argument1, argument2) -> Function2.this.apply(argument1, argument);
     }
 
     /**
