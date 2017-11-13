@@ -1,6 +1,7 @@
 package ru.spbau.mit.karvozavr.tree;
 
 import org.jetbrains.annotations.NotNull;
+
 import java.util.AbstractSet;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -12,6 +13,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
     private Node<E> head = null;
     private Node<E> tail = null;
     private int size = 0;
+    private TreeSet<E> pater = null;
 
     public TreeSet() {
         comparator = new DefaultComparator<>();
@@ -19,6 +21,15 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     public TreeSet(Comparator<E> comparator) {
         this.comparator = comparator;
+    }
+
+    private TreeSet(TreeSet<E> that) {
+        this(that.comparator);
+        root = that.root;
+        tail = that.head;
+        head = that.tail;
+        size = that.size;
+        pater = that;
     }
 
     @Override
@@ -38,12 +49,13 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     @Override
     public MyTreeSet<E> descendingSet() {
-        return null;
+        return new TreeSet<>(this);
     }
 
     /**
      * Returns the first (lowest) element currently in this set.
-     * @return the first (lowest) element currently in this set.
+     *
+     * @return the first (lowest) element currently in this set
      */
     @Override
     public E first() {
@@ -52,6 +64,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     /**
      * Returns the last (highest) element currently in this set.
+     *
      * @return the last (highest) element currently in this set
      */
     @Override
@@ -66,7 +79,11 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     @Override
     public E floor(E element) {
-        return null;
+        if (contains(element)) {
+            return element;
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -79,66 +96,113 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         return null;
     }
 
+    // TODO FIXME
     @Override
     public boolean remove(Object element) {
-        throw new UnsupportedOperationException();
+        if (pater != null) {
+            return pater.remove(element);
+        }
+
+        Node<E> node = getNode(element);
+
+        if (node != null) {
+            node.remove();
+            return true;
+        }
+
+        return false;
     }
 
     /**
-     * Check if the Tree contains element.
+     * Checks if the Tree contains element.
      *
-     * @param element to search for
+     * @param element to look for
      * @return if the element in the Tree
      */
     @Override
     public boolean contains(Object element) {
-        return containsRecursive(element, root);
+        return getNode(element) != null;
     }
 
     /**
-     * Check if the Tree contains element recursive implementation.
+     * Adds element to TreeSet.
      *
-     * @param element to search for
-     * @param node    current node
-     * @return if the element in the Tree
-     */
-    private boolean containsRecursive(Object element, Node<E> node) {
-        return node != null && (element.equals(node.data) || containsRecursive(element, node.left) || containsRecursive(element, node.right));
-    }
-
-    /**
-     * Add element to TreeSet.
      * @param element element to add
      * @return if the element already exist in TreeSet
      */
     @Override
     public boolean add(@NotNull E element) {
-        if (root == null) {
-            root = new Node<>(element);
+        if (pater != null) {
+            boolean result = pater.add(element);
+            head = pater.tail;
+            tail = pater.head;
+            root = pater.root;
+            size = pater.size;
+            return result;
+        } else {
+            if (contains(element)) {
+                return true;
+            }
+
             ++size;
-            head = root;
-            tail = root;
-            return false;
+            if (root == null) {
+                root = new Node<>(element);
+                head = root;
+                tail = root;
+                return false;
+            }
+
+            Node<E> node = root;
+
+            while (true) {
+                if (comparator.compare(element, node.data) <= 0) {
+                    if (node.left == null) {
+                        node.insertBefore(element);
+                        return false;
+                    } else {
+                        node = node.left;
+                    }
+                } else {
+                    if (node.right == null) {
+                        node.insertAfter(element);
+                        return false;
+                    } else {
+                        node = node.right;
+                    }
+                }
+            }
         }
+    }
+
+    /**
+     * Returns Node with given element if it is in TreeSet, null otherwise.
+     *
+     * @param element to look for
+     * @return Node with given element if it is in TreeSet, null otherwise
+     */
+    @SuppressWarnings("unchecked")
+    private Node<E> getNode(Object element) {
+        if (root == null) {
+            return null;
+        }
+
+        final E actualElement = (E) element;
 
         Node<E> node = root;
 
         while (true) {
-            if (element.equals(node.data)) {
-                return true;
+            if (actualElement.equals(node.data)) {
+                return node;
             }
-
-            if (comparator.compare(element, node.data) <= 0) {
+            if (comparator.compare(actualElement, node.data) <= 0) {
                 if (node.left == null) {
-                    node.insertBefore(element);
-                    return false;
+                    return null;
                 } else {
                     node = node.left;
                 }
             } else {
                 if (node.right == null) {
-                    node.insertAfter(element);
-                    return false;
+                    return null;
                 } else {
                     node = node.right;
                 }
@@ -151,7 +215,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
      *
      * @param <T> element parameter, must implement Comparable<T>
      */
-    private class DefaultComparator<T> implements Comparator<T> {
+    private static class DefaultComparator<T> implements Comparator<T> {
 
         @SuppressWarnings("unchecked")
         @Override
@@ -181,31 +245,30 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         }
 
         /**
-         * Insert new element after this node.
+         * Inserts new element after this node.
+         *
          * @param element element to insert
          */
         void insertAfter(T element) {
             right = new Node<>(element);
-            ++TreeSet.this.size;
             right.prev = this;
             right.next = this.next;
             if (this.next != null) {
                 this.next.prev = right;
             }
             this.next = right;
-
             if (tail.next != null) {
                 tail = tail.next;
             }
         }
 
         /**
-         * Insert new element before this node.
+         * Inserts new element before this node.
+         *
          * @param element element to insert
          */
         void insertBefore(T element) {
             left = new Node<>(element);
-            ++TreeSet.this.size;
             left.next = this;
             left.prev = this.prev;
             if (this.prev != null) {
@@ -214,6 +277,24 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
             this.prev = left;
             if (head.prev != null) {
                 head = head.prev;
+            }
+        }
+
+        void remove() {
+            if (this == tail) {
+                tail = tail.prev;
+            }
+
+            if (this == head) {
+                head = head.next;
+            }
+
+            if (next != null) {
+                next.prev = prev;
+            }
+
+            if (prev != null) {
+                prev.next = next;
             }
         }
     }
