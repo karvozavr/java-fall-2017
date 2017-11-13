@@ -1,0 +1,12 @@
+language: java
+jdk:
+  - oraclejdk8
+os:
+  - linux
+sudo: 
+  - false
+before_install: 
+  - cd hw7-TreeSet 
+script:
+  - gradle clean check
+
