@@ -5,8 +5,8 @@ os:
   - linux
 sudo: 
   - false
-before_install: 
+before_script: 
   - cd hw7-TreeSet 
 script:
-  - gradle clean check
+  - ./gradlew clean check
 
