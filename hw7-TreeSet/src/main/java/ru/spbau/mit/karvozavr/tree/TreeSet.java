@@ -89,17 +89,17 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         Node node = root;
         while (node != null) {
             if (comparator.compare(element, node.value) > 0) {
-                if (node.right == null) {
+                if (node.right != null)
+                    node = node.right;
+                else
                     return node.value;
-                }
-
-                node = node.right;
             } else {
-                if (node.right == null) {
-
-                }
-
-                node = node.right;
+                if (node.left != null)
+                    node = node.left;
+                else if (node.prev != null)
+                    return node.prev.value;
+                else
+                    return null;
             }
         }
 
@@ -128,7 +128,24 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     @Override
     public E higher(E element) {
-        throw new UnsupportedOperationException();
+        Node node = root;
+        while (node != null) {
+            if (comparator.compare(element, node.value) < 0) {
+                if (node.left != null)
+                    node = node.left;
+                else
+                    return node.value;
+            } else {
+                if (node.right != null)
+                    node = node.right;
+                else if (node.next != null)
+                    return node.next.value;
+                else
+                    return null;
+            }
+        }
+
+        return null;
     }
 
     @Override
