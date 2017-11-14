@@ -6,56 +6,66 @@ import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Iterator;
 
-class TreeSetDescendingView<E> extends AbstractSet<E> implements MyTreeSet<E> {
+class TreeSetDescendingView<T> extends AbstractSet<T> implements MyTreeSet<T> {
 
-    final TreeSet<E> pater;
+    final TreeSet<T> pater;
 
-    TreeSetDescendingView(TreeSet<E> pater) {
+    TreeSetDescendingView(TreeSet<T> pater) {
         this.pater = pater;
     }
 
     @Override
-    public Iterator<E> descendingIterator() {
+    public Iterator<T> descendingIterator() {
         return pater.iterator();
     }
 
     @Override
-    public MyTreeSet<E> descendingSet() {
+    public MyTreeSet<T> descendingSet() {
         return pater;
     }
 
     @Override
-    public E first() {
+    public T first() {
         return pater.last();
     }
 
     @Override
-    public E last() {
+    public T last() {
         return pater.first();
     }
 
     @Override
-    public E lower(E e) {
+    public T lower(T e) {
         return pater.higher(e);
     }
 
     @Override
-    public E floor(E e) {
+    public T floor(T e) {
         return pater.ceiling(e);
     }
 
     @Override
-    public E ceiling(E e) {
+    public T ceiling(T e) {
         return pater.floor(e);
     }
 
     @Override
-    public E higher(E e) {
+    public T higher(T e) {
         return pater.lower(e);
     }
 
     @Override
-    public Iterator<E> iterator() {
+    public boolean remove(Object o) {
+        return pater.remove(o);
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return pater.contains(o);
+    }
+
+    @Override
+    public Iterator<T> iterator() {
         return pater.descendingIterator();
     }
 
