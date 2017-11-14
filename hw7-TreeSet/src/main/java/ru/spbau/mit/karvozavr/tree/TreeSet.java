@@ -56,6 +56,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     /**
      * Returns number of elements in this set.
+     *
      * @return number of elements in this set
      */
     @Override
@@ -139,10 +140,16 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         modCount = BigInteger.ZERO;
     }
 
-    // TODO FIXME
     @Override
     public boolean remove(Object element) {
-        throw new UnsupportedOperationException();
+        Node<E> nodeToRemove = getNode(element);
+
+        if (nodeToRemove != null) {
+            nodeToRemove.remove();
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -168,9 +175,9 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
             return true;
         }
 
-        modCount.add(BigInteger.ONE);
-        ++size;
         if (root == null) {
+            modCount.add(BigInteger.ONE);
+            ++size;
             root = new Node<>(element);
             head = root;
             tail = root;
@@ -337,6 +344,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         private Node<T> right;
         private Node<T> prev;
         private Node<T> next;
+        private Node<T> parent;
         private T value;
 
         public Node(@NotNull T element) {
@@ -349,7 +357,11 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
          * @param element element to insert
          */
         public void insertAfter(T element) {
+            modCount.add(BigInteger.ONE);
+            ++size;
+
             right = new Node<>(element);
+            right.parent = this;
             right.prev = this;
             right.next = this.next;
             if (this.next != null) {
@@ -367,38 +379,55 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
          * @param element element to insert
          */
         public void insertBefore(T element) {
+            modCount.add(BigInteger.ONE);
+            ++size;
+
             left = new Node<>(element);
+            left.parent = this;
             left.next = this;
             left.prev = this.prev;
-            if (this.prev != null) {
+
+            if (this.prev != null)
                 this.prev.next = left;
-            }
+
             this.prev = left;
-            if (head.prev != null) {
+
+            if (head.prev != null)
                 head = head.prev;
-            }
         }
 
-        // TODO FIXME
         public void remove() {
-            if (this == tail) {
+            modCount.add(BigInteger.ONE);
+            --size;
+
+            if (this == root)
+
+            if (this == tail)
                 tail = tail.prev;
-            }
 
-            if (this == head) {
+            if (this == head)
                 head = head.next;
+
+            if (right == null) {
+                if (parent.left == this)
+                    parent.left = left;
+                else
+                    parent.right = left;
+
+                left.parent = parent;
             }
 
-            if (next != null) {
+            if (next != null)
                 next.prev = prev;
-            }
 
-            if (prev != null) {
+            if (prev != null)
                 prev.next = next;
-            }
         }
     }
 
+    /**
+     * View of this set in descending order.
+     */
     private class TreeSetDescendingView extends AbstractSet<E> implements MyTreeSet<E> {
 
         final TreeSet<E> pater;
@@ -407,6 +436,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
             this.pater = TreeSet.this;
         }
 
+        @NotNull
         @Override
         public Iterator<E> descendingIterator() {
             return pater.iterator();
@@ -457,6 +487,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
             return pater.contains(o);
         }
 
+        @NotNull
         @Override
         public Iterator<E> iterator() {
             return pater.descendingIterator();

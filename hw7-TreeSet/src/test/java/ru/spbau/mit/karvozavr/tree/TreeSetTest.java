@@ -25,7 +25,7 @@ class TreeSetTest {
 
     @Test
     void testContainsBase() {
-        final TreeSet<String> tree = new  TreeSet<>();
+        final TreeSet<String> tree = new TreeSet<>();
         assertThat(tree.contains("Lol"), is(false));
         tree.add("Lol");
         assertThat(tree.contains("Lol"), is(true));
@@ -43,6 +43,25 @@ class TreeSetTest {
     }
 
     @Test
+    void testClear() {
+        final TreeSet<Integer> tree = new TreeSet<>();
+
+        for (int i = 0; i < 100; i++) {
+            tree.add(i);
+        }
+
+        assertThat(tree.size(), is(100));
+
+        tree.clear();
+
+        assertThat(tree.isEmpty(), is(true));
+        assertThat(tree.first(), is(nullValue()));
+        assertThat(tree.last(), is(nullValue()));
+        assertThat(tree.iterator().hasNext(), is(false));
+        assertThat(tree.descendingIterator().hasNext(), is(false));
+    }
+
+    @Test
     void testSizeEmpty() {
         final TreeSet<Integer> tree = new TreeSet<>();
         assertThat(tree.size(), is(0));
@@ -54,5 +73,24 @@ class TreeSetTest {
         assertThat(tree.isEmpty(), is(true));
         tree.add(42);
         assertThat(tree.isEmpty(), is(false));
+    }
+
+    @Test
+    void testRemove() {
+        final TreeSet<Integer> tree = new TreeSet<>();
+
+        for (int i = 0; i < 100; i++) {
+            tree.add(i);
+        }
+
+        assertThat(tree.remove(25), is(true));
+        assertThat(tree.remove(42), is(true));
+        assertThat(tree.contains(25), is(false));
+        assertThat(tree.contains(42), is(false));
+
+        for (int i = 0; i < 100; i++) {
+            if (i != 25 && i != 42)
+                assertThat(tree.contains(i), is(true));
+        }
     }
 }
