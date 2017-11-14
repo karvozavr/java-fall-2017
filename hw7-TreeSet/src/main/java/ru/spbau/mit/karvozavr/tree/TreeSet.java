@@ -2,9 +2,11 @@ package ru.spbau.mit.karvozavr.tree;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.math.BigInteger;
 import java.util.AbstractSet;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
@@ -13,45 +15,57 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
     private Node<E> head = null;
     private Node<E> tail = null;
     private int size = 0;
-    private TreeSet<E> pater = null;
+    private BigInteger modCount = BigInteger.ZERO;
 
     public TreeSet() {
         comparator = new DefaultComparator<>();
     }
 
-    public TreeSet(Comparator<E> comparator) {
+    public TreeSet(@NotNull Comparator<E> comparator) {
         this.comparator = comparator;
     }
 
-    private TreeSet(TreeSet<E> that) {
-        this(that.comparator);
-        root = that.root;
-        tail = that.head;
-        head = that.tail;
-        size = that.size;
-        pater = that;
-    }
-
+    /**
+     * Returns an iterator over the elements in this set in ascending order.
+     *
+     * @return an iterator over the elements in this set in ascending order
+     */
+    @NotNull
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new ForwardIterator();
     }
 
+    /**
+     * Returns an iterator over the elements in this set in descending order.
+     *
+     * @return an iterator over the elements in this set in descending order
+     */
+    @NotNull
+    @Override
+    public Iterator<E> descendingIterator() {
+        return new ReverseIterator();
+    }
+
+    /**
+     * Returns a reverse order view of the elements contained in this set.
+     *
+     * @return a reverse order view of the elements contained in this set
+     */
+    @Override
+    public MyTreeSet<E> descendingSet() {
+        return new TreeSetDescendingView<>(this);
+    }
+
+    /**
+     * Returns number of elements in this set.
+     * @return number of elements in this set
+     */
     @Override
     public int size() {
         return size;
     }
-
-    @Override
-    public Iterator<E> descendingIterator() {
-        return null;
-    }
-
-    @Override
-    public MyTreeSet<E> descendingSet() {
-        return new TreeSet<>(this);
-    }
-
+    
     /**
      * Returns the first (lowest) element currently in this set.
      *
@@ -74,43 +88,55 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     @Override
     public E lower(E element) {
+        Node<E> node = root;
+        while (node != null) {
+            if (comparator.compare(element, node.data) > 0) {
+                if (node.right == null) {
+                    return node.data;
+                }
+
+                node = node.right;
+            } else {
+                if (node.right == null) {
+
+                }
+
+                node = node.right;
+            }
+        }
+
         return null;
     }
 
     @Override
     public E floor(E element) {
-        if (contains(element)) {
-            return element;
-        } else {
+        if (comparator.compare(element, head.data) < 0) {
             return null;
         }
+
+        Node<E> node = getNode(element);
+        if (node != null) {
+            return element;
+        }
+
+
+        return lower(element);
     }
 
     @Override
     public E ceiling(E element) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public E higher(E element) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // TODO FIXME
     @Override
     public boolean remove(Object element) {
-        if (pater != null) {
-            return pater.remove(element);
-        }
-
-        Node<E> node = getNode(element);
-
-        if (node != null) {
-            node.remove();
-            return true;
-        }
-
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -132,43 +158,35 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
      */
     @Override
     public boolean add(@NotNull E element) {
-        if (pater != null) {
-            boolean result = pater.add(element);
-            head = pater.tail;
-            tail = pater.head;
-            root = pater.root;
-            size = pater.size;
-            return result;
-        } else {
-            if (contains(element)) {
-                return true;
-            }
+        if (contains(element)) {
+            return true;
+        }
 
-            ++size;
-            if (root == null) {
-                root = new Node<>(element);
-                head = root;
-                tail = root;
-                return false;
-            }
+        modCount.add(BigInteger.ONE);
+        ++size;
+        if (root == null) {
+            root = new Node<>(element);
+            head = root;
+            tail = root;
+            return false;
+        }
 
-            Node<E> node = root;
+        Node<E> node = root;
 
-            while (true) {
-                if (comparator.compare(element, node.data) <= 0) {
-                    if (node.left == null) {
-                        node.insertBefore(element);
-                        return false;
-                    } else {
-                        node = node.left;
-                    }
+        while (true) {
+            if (comparator.compare(element, node.data) <= 0) {
+                if (node.left == null) {
+                    node.insertBefore(element);
+                    return false;
                 } else {
-                    if (node.right == null) {
-                        node.insertAfter(element);
-                        return false;
-                    } else {
-                        node = node.right;
-                    }
+                    node = node.left;
+                }
+            } else {
+                if (node.right == null) {
+                    node.insertAfter(element);
+                    return false;
+                } else {
+                    node = node.right;
                 }
             }
         }
@@ -228,6 +246,83 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         }
     }
 
+    private abstract class NodeIterator implements Iterator<E> {
+
+        Node<E> next;
+        Node<E> lastReturned = null;
+        BigInteger expectedModCount;
+
+        public NodeIterator() {
+            expectedModCount = modCount;
+            next = first();
+        }
+    }
+
+    /**
+     * Forward iterator on elements of TreeSet
+     */
+    private class ForwardIterator implements Iterator<E> {
+
+        private Node<E> currentNode = null;
+
+        public ForwardIterator() {
+            currentNode = head;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return currentNode.next != null;
+        }
+
+        @Override
+        public E next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
+            E result = currentNode.data;
+            currentNode = currentNode.next;
+            return result;
+        }
+
+        @Override
+        public void remove() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
+
+        }
+    }
+
+    /**
+     * Reverse iterator on elements of TreeSet
+     */
+    private class ReverseIterator implements Iterator<E> {
+
+        private Node<E> currentNode = null;
+
+        public ReverseIterator() {
+            currentNode = tail;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return currentNode.prev != null;
+        }
+
+        @Override
+        public E next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+
+            E result = currentNode.data;
+            currentNode = currentNode.prev;
+            return result;
+        }
+    }
+
     /**
      * Inner class of Binary Tree Node
      *
@@ -240,7 +335,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         private Node<T> next;
         private T data;
 
-        Node(@NotNull T element) {
+        public Node(@NotNull T element) {
             this.data = element;
         }
 
@@ -249,7 +344,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
          *
          * @param element element to insert
          */
-        void insertAfter(T element) {
+        public void insertAfter(T element) {
             right = new Node<>(element);
             right.prev = this;
             right.next = this.next;
@@ -267,7 +362,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
          *
          * @param element element to insert
          */
-        void insertBefore(T element) {
+        public void insertBefore(T element) {
             left = new Node<>(element);
             left.next = this;
             left.prev = this.prev;
@@ -280,7 +375,8 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
             }
         }
 
-        void remove() {
+        // TODO FIXME
+        public void remove() {
             if (this == tail) {
                 tail = tail.prev;
             }
