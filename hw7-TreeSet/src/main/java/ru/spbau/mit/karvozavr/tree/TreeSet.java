@@ -8,9 +8,9 @@ import java.util.*;
 public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     private final Comparator<E> comparator;
-    private Node<E> root = null;
-    private Node<E> head = null;
-    private Node<E> tail = null;
+    private Node root = null;
+    private Node head = null;
+    private Node tail = null;
     private int size = 0;
     private BigInteger modCount = BigInteger.ZERO;
 
@@ -86,7 +86,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     @Override
     public E lower(E element) {
-        Node<E> node = root;
+        Node node = root;
         while (node != null) {
             if (comparator.compare(element, node.value) > 0) {
                 if (node.right == null) {
@@ -112,7 +112,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
             return null;
         }
 
-        Node<E> node = getNode(element);
+        Node node = getNode(element);
         if (node != null) {
             return element;
         }
@@ -142,7 +142,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     @Override
     public boolean remove(Object element) {
-        Node<E> nodeToRemove = getNode(element);
+        Node nodeToRemove = getNode(element);
 
         if (nodeToRemove != null) {
             nodeToRemove.remove();
@@ -178,13 +178,13 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         if (root == null) {
             modCount.add(BigInteger.ONE);
             ++size;
-            root = new Node<>(element);
+            root = new Node(element);
             head = root;
             tail = root;
             return false;
         }
 
-        Node<E> node = root;
+        Node node = root;
 
         while (true) {
             if (comparator.compare(element, node.value) <= 0) {
@@ -212,14 +212,14 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
      * @return Node with given element if it is in TreeSet, null otherwise
      */
     @SuppressWarnings("unchecked")
-    private Node<E> getNode(Object element) {
+    private Node getNode(Object element) {
         if (root == null) {
             return null;
         }
 
         final E actualElement = (E) element;
 
-        Node<E> node = root;
+        Node node = root;
 
         while (true) {
             if (actualElement.equals(node.value)) {
@@ -264,8 +264,8 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
      */
     private abstract class AbstractNodeIterator implements Iterator<E> {
 
-        Node<E> next;
-        Node<E> lastReturned = null;
+        Node next;
+        Node lastReturned = null;
         BigInteger expectedModCount;
 
         public AbstractNodeIterator() {
@@ -278,8 +278,8 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
             return next != null;
         }
 
-        Node<E> nextNode() {
-            Node<E> node = next;
+        Node nextNode() {
+            Node node = next;
             if (next == null)
                 throw new NoSuchElementException();
             if (!modCount.equals(expectedModCount))
@@ -289,8 +289,8 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
             return node;
         }
 
-        Node<E> prevNode() {
-            Node<E> node = next;
+        Node prevNode() {
+            Node node = next;
             if (next == null)
                 throw new NoSuchElementException();
             if (!modCount.equals(expectedModCount))
@@ -335,20 +335,18 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
     }
 
     /**
-     * Inner class of Binary Tree Node
-     *
-     * @param <T> type of stored element
+     * Inner class of Binary Tree Node.
      */
-    private class Node<T> {
-        private Node<T> left;
-        private Node<T> right;
-        private Node<T> prev;
-        private Node<T> next;
-        private Node<T> parent;
-        private T value;
+    private class Node {
+        private Node left;
+        private Node right;
+        private Node prev;
+        private Node next;
+        private Node parent;
+        private E value;
 
-        public Node(@NotNull T element) {
-            this.value = element;
+        public Node(E element) {
+            value = element;
         }
 
         /**
@@ -356,11 +354,11 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
          *
          * @param element element to insert
          */
-        public void insertAfter(T element) {
+        public void insertAfter(E element) {
             modCount.add(BigInteger.ONE);
             ++size;
 
-            right = new Node<>(element);
+            right = new Node(element);
             right.parent = this;
             right.prev = this;
             right.next = this.next;
@@ -378,11 +376,11 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
          *
          * @param element element to insert
          */
-        public void insertBefore(T element) {
+        public void insertBefore(E element) {
             modCount.add(BigInteger.ONE);
             ++size;
 
-            left = new Node<>(element);
+            left = new Node(element);
             left.parent = this;
             left.next = this;
             left.prev = this.prev;
@@ -400,8 +398,6 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
             modCount.add(BigInteger.ONE);
             --size;
 
-            if (this == root)
-
             if (this == tail)
                 tail = tail.prev;
 
@@ -415,6 +411,26 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
                     parent.right = left;
 
                 left.parent = parent;
+
+                if (this == root)
+                    root = left;
+            } else {
+                if (parent.left == this)
+                    parent.left = next;
+                else
+                    parent.right = next;
+
+                if (next != null) {
+                    next.left = left;
+                    next.parent.left = null;
+                    next.parent = parent;
+                }
+
+                if (left != null)
+                    left.parent = next;
+
+                if (this == root)
+                    root = next;
             }
 
             if (next != null)

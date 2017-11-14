@@ -88,6 +88,8 @@ class TreeSetTest {
         assertThat(tree.contains(25), is(false));
         assertThat(tree.contains(42), is(false));
 
+        assertThat(tree.size(), is(98));
+
         for (int i = 0; i < 100; i++) {
             if (i != 25 && i != 42)
                 assertThat(tree.contains(i), is(true));
