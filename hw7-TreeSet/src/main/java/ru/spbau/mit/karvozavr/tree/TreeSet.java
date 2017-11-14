@@ -14,10 +14,17 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
     private int size = 0;
     private BigInteger modCount = BigInteger.ZERO;
 
+    /**
+     * Create Comparable based set.
+     */
     public TreeSet() {
         comparator = new DefaultComparator<>();
     }
 
+
+    /**
+     * Create custom Comparator based set.
+     */
     public TreeSet(@NotNull Comparator<E> comparator) {
         this.comparator = comparator;
     }
@@ -108,7 +115,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     @Override
     public E floor(E element) {
-        if (comparator.compare(element, head.value) < 0) {
+        if (comparator.compare(element, first()) < 0) {
             return null;
         }
 
@@ -123,7 +130,17 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     @Override
     public E ceiling(E element) {
-        throw new UnsupportedOperationException();
+        if (comparator.compare(element, last()) > 0) {
+            return null;
+        }
+
+        Node node = getNode(element);
+        if (node != null) {
+            return element;
+        }
+
+
+        return higher(element);
     }
 
     @Override
