@@ -2,7 +2,6 @@ package ru.spbau.mit.karvozavr.tree;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.math.BigInteger;
 import java.util.*;
 
 public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
@@ -12,7 +11,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
     private Node head = null;
     private Node tail = null;
     private int size = 0;
-    private BigInteger modCount = BigInteger.ZERO;
+    private long modCount = 0;
 
     /**
      * Create Comparable based set.
@@ -171,7 +170,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         head = null;
         tail = null;
         size = 0;
-        modCount = BigInteger.ZERO;
+        modCount = 0;
     }
 
     @Override
@@ -210,7 +209,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         }
 
         if (root == null) {
-            modCount.add(BigInteger.ONE);
+            ++modCount;
             ++size;
             root = new Node(element);
             head = root;
@@ -300,7 +299,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
         Node next;
         Node lastReturned = null;
-        BigInteger expectedModCount;
+        long expectedModCount;
 
         public AbstractNodeIterator() {
             expectedModCount = modCount;
@@ -316,7 +315,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
             Node node = next;
             if (next == null)
                 throw new NoSuchElementException();
-            if (!modCount.equals(expectedModCount))
+            if (modCount != expectedModCount)
                 throw new ConcurrentModificationException();
             next = node.next;
             lastReturned = node;
@@ -327,7 +326,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
             Node node = next;
             if (next == null)
                 throw new NoSuchElementException();
-            if (!modCount.equals(expectedModCount))
+            if (modCount != expectedModCount)
                 throw new ConcurrentModificationException();
             next = node.prev;
             lastReturned = node;
@@ -338,7 +337,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         public void remove() {
             if (lastReturned == null)
                 throw new IllegalStateException();
-            if (!modCount.equals(expectedModCount))
+            if (modCount != expectedModCount)
                 throw new ConcurrentModificationException();
             lastReturned.remove();
             lastReturned = null;
@@ -389,7 +388,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
          * @param element element to insert
          */
         public void insertAfter(E element) {
-            modCount.add(BigInteger.ONE);
+            ++modCount;
             ++size;
 
             right = new Node(element);
@@ -411,7 +410,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
          * @param element element to insert
          */
         public void insertBefore(E element) {
-            modCount.add(BigInteger.ONE);
+            ++modCount;
             ++size;
 
             left = new Node(element);
@@ -429,7 +428,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         }
 
         public void remove() {
-            modCount.add(BigInteger.ONE);
+            ++modCount;
             --size;
 
             if (this == tail)

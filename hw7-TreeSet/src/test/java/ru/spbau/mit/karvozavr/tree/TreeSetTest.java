@@ -2,8 +2,10 @@ package ru.spbau.mit.karvozavr.tree;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Collections;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
@@ -161,5 +163,25 @@ class TreeSetTest {
         assertThat(tree.ceiling(25), is(25));
         assertThat(tree.ceiling(-1), is(0));
         assertThat(tree.ceiling(100500), is(nullValue()));
+    }
+
+    @Test
+    void testToArray() {
+        Integer[] a = new Integer[100];
+        TreeSet<Integer> tree = new TreeSet<>();
+
+        for (int i = 0; i < 100; ++i) {
+            a[i] = i;
+        }
+
+        tree.addAll(Arrays.asList(a));
+
+        Object[] b = tree.toArray();
+        assertArrayEquals(a, b);
+    }
+
+    @Test
+    void testIterator() {
+
     }
 }
