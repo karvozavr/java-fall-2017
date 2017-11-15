@@ -92,6 +92,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     /**
      * Returns element less than given.
+     *
      * @param element to look for
      * @return element less than given
      */
@@ -119,6 +120,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     /**
      * Returns element equal or less than given.
+     *
      * @param element to look for
      * @return element equal or less than given
      */
@@ -139,6 +141,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     /**
      * Returns element equal or greater than given.
+     *
      * @param element to look for
      * @return element equal or greater than given
      */
@@ -159,6 +162,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     /**
      * Returns element greater than given.
+     *
      * @param element to look for
      * @return element greater than given
      */
@@ -198,6 +202,7 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
 
     /**
      * Remove element from the set.
+     *
      * @param element to remove
      * @return if the element found
      */
@@ -469,20 +474,24 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
                 head = head.next;
 
             if (right == null) {
-                if (parent.left == this)
-                    parent.left = left;
-                else
-                    parent.right = left;
+                if (parent != null) {
+                    if (parent.left == this)
+                        parent.left = left;
+                    else
+                        parent.right = left;
+                }
 
                 left.parent = parent;
 
                 if (this == root)
                     root = left;
             } else {
-                if (parent.left == this)
-                    parent.left = next;
-                else
-                    parent.right = next;
+                if (parent != null) {
+                    if (parent.left == this)
+                        parent.left = next;
+                    else
+                        parent.right = next;
+                }
 
                 if (next != null) {
                     next.left = left;
@@ -578,5 +587,4 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
             return pater.size();
         }
     }
-
 }

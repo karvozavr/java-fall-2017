@@ -181,4 +181,35 @@ class TreeSetTest {
         Object[] b = tree.toArray();
         assertArrayEquals(a, b);
     }
+
+    @Test
+    void testIteratorInvalidation() {
+        TreeSet<Integer> tree = new TreeSet<>();
+        tree.add(2);
+        tree.add(3);
+        tree.add(42);
+
+        Iterator<Integer> iterator1 = tree.iterator();
+        Iterator<Integer> iterator2 = tree.iterator();
+        iterator1.next();
+        iterator2.next();
+        iterator1.remove();
+        assertThrows(ConcurrentModificationException.class, iterator2::next);
+    }
+
+    @Test
+    void testDescendingSet() {
+        TreeSet<Integer> tree = new TreeSet<>();
+
+        for (int i = 0; i < 100; ++i) {
+            tree.add(i);
+        }
+
+        Iterator<Integer> iterator1 = tree.iterator();
+        Iterator<Integer> iterator2 = tree.descendingSet().descendingIterator();
+
+        while (iterator1.hasNext()) {
+            assertThat(iterator1.next(), is(iterator2.next()));
+        }
+    }
 }
