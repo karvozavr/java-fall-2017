@@ -90,6 +90,11 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         return tail != null ? tail.value : null;
     }
 
+    /**
+     * Returns element less than given.
+     * @param element to look for
+     * @return element less than given
+     */
     @Override
     public E lower(E element) {
         Node node = root;
@@ -112,6 +117,11 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         return null;
     }
 
+    /**
+     * Returns element equal or less than given.
+     * @param element to look for
+     * @return element equal or less than given
+     */
     @Override
     public E floor(E element) {
         if (comparator.compare(element, first()) < 0) {
@@ -127,6 +137,11 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         return lower(element);
     }
 
+    /**
+     * Returns element equal or greater than given.
+     * @param element to look for
+     * @return element equal or greater than given
+     */
     @Override
     public E ceiling(E element) {
         if (comparator.compare(element, last()) > 0) {
@@ -142,6 +157,11 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         return higher(element);
     }
 
+    /**
+     * Returns element greater than given.
+     * @param element to look for
+     * @return element greater than given
+     */
     @Override
     public E higher(E element) {
         Node node = root;
@@ -164,6 +184,9 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         return null;
     }
 
+    /**
+     * Clears set.
+     */
     @Override
     public void clear() {
         root = null;
@@ -173,6 +196,11 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
         modCount = 0;
     }
 
+    /**
+     * Remove element from the set.
+     * @param element to remove
+     * @return if the element found
+     */
     @Override
     public boolean remove(Object element) {
         Node nodeToRemove = getNode(element);
@@ -427,6 +455,9 @@ public class TreeSet<E> extends AbstractSet<E> implements MyTreeSet<E> {
                 head = head.prev;
         }
 
+        /**
+         * Removes node from set.
+         */
         public void remove() {
             ++modCount;
             --size;

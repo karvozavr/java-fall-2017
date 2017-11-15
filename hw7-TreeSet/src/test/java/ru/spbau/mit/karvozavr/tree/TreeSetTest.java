@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -178,10 +180,5 @@ class TreeSetTest {
 
         Object[] b = tree.toArray();
         assertArrayEquals(a, b);
-    }
-
-    @Test
-    void testIterator() {
-
     }
 }
