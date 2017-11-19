@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Test1-LinkedHashMap.iml" filepath="$PROJECT_DIR$/.idea/modules/Test1-LinkedHashMap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-811722297/Test1-LinkedHashMap_main.iml" filepath="$PROJECT_DIR$/.idea/modules/-811722297/Test1-LinkedHashMap_main.iml" group="Test1-LinkedHashMap" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-811722297/Test1-LinkedHashMap_test.iml" filepath="$PROJECT_DIR$/.idea/modules/-811722297/Test1-LinkedHashMap_test.iml" group="Test1-LinkedHashMap" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-811722297/java-fall-2017-Test1-LinkedHashMap.iml" filepath="$PROJECT_DIR$/.idea/modules/-811722297/java-fall-2017-Test1-LinkedHashMap.iml" />
+    </modules>
+  </component>
+</project>
