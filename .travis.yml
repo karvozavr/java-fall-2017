@@ -1,7 +1,7 @@
 language: java
 sudo: false
 
-before_install: cd hw3-Trie 
+before_install: cd hw8-Mocks 
 
 script: gradle clean check
 
