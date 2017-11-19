@@ -1,0 +1,4 @@
+language: java
+sudo: false
+before_install: cd hw4 
+script: gradle clean check
