@@ -50,8 +50,7 @@ class ZipUtilsTest {
                             assertTrue(FileUtils.contentEquals(file.toFile(),
                                     Paths.get("src", "test", "resources", "reference", "test1", file.getFileName().toString()).toFile()));
                         } catch (IOException e) {
-                            e.printStackTrace();
-                            fail("Everything gone bad.");
+                            throw new RuntimeException(e);
                         }
                     });
         }
@@ -91,7 +90,7 @@ class ZipUtilsTest {
     }
 
     @AfterEach
-    void afterClean() {
+    void afterClean() throws IOException {
         try (final Stream<Path> directory = Files.walk(workingDirectory)) {
             directory
                     .sorted(Comparator.reverseOrder())
@@ -102,8 +101,6 @@ class ZipUtilsTest {
                             e.printStackTrace();
                         }
                     });
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 

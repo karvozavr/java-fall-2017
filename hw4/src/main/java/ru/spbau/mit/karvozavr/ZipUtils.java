@@ -1,10 +1,12 @@
 package ru.spbau.mit.karvozavr;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.stream.Stream;
 
+/**
+ * Methods to work with zip archives.
+ */
 public class ZipUtils {
 
     /**
@@ -25,7 +27,7 @@ public class ZipUtils {
                             try {
                                 Files.copy(file, Paths.get(baseDirectory.getFileName().toString(), file.getFileName().toString()));
                             } catch (IOException e) {
-                                e.printStackTrace();
+                                throw new RuntimeException(e);
                             }
                         });
             }
