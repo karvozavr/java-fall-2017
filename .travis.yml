@@ -1,0 +1,4 @@
+language: java
+sudo: false
+before_install: cd hw2-matrix 
+script: gradle clean check
