@@ -77,7 +77,9 @@ public class BinaryTree<T extends Comparable<T>> {
      */
     @Contract("_, null -> false")
     private boolean containsRecursive(T element, Node<T> node) {
-        return node != null && (element.compareTo(node.data) == 0 || containsRecursive(element, node.left) || containsRecursive(element, node.right));
+        return node != null && (element.compareTo(node.data) == 0
+                || containsRecursive(element, node.left)
+                || containsRecursive(element, node.right));
     }
 
     /**
