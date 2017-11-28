@@ -41,4 +41,9 @@ public interface Stack<T> {
         push(element);
         return element;
     }
+
+    /**
+     * Reverses stack.
+     */
+    public void reverse();
 }
