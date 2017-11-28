@@ -6,8 +6,16 @@ import ru.spbau.mit.karvozavr.calculator.enums.Operator;
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
 
+/**
+ * Util to parse arithmetic expressions
+ */
 public class ExpressionParser {
 
+    /**
+     * Tokenize expression to array of tokens (number | operator)
+     * @param expression to tokenize
+     * @return array of tokens (number | operator)
+     */
     public static @NotNull Object[] tokenize(@NotNull String expression) {
         final String[] tokens = expression.split(" ", -1);
         final ArrayList<Object> parsedTokens = new ArrayList<>();
@@ -23,6 +31,11 @@ public class ExpressionParser {
         return parsedTokens.toArray();
     }
 
+    /**
+     * Parses single token.
+     * @param expression token to parse
+     * @return parsed token
+     */
     private static Object parseToken(@NotNull String expression) {
         Object result = parseNumber(expression);
         if (result == null)
@@ -31,6 +44,11 @@ public class ExpressionParser {
             return result;
     }
 
+    /**
+     * Parses single number token.
+     * @param expression token to parse
+     * @return parsed token
+     */
     private static Integer parseNumber(@NotNull String expression) {
         try {
             return Integer.parseInt(expression);
@@ -39,6 +57,11 @@ public class ExpressionParser {
         }
     }
 
+    /**
+     * Parses single operator token.
+     * @param expression token to parse
+     * @return parsed token
+     */
     private static Operator parseOperation(@NotNull String expression) {
         if (expression.isEmpty()) {
             return null;

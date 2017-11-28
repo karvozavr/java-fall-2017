@@ -12,6 +12,10 @@ public class Calculator {
 
     private Stack<Object> expressionStack;
 
+    /**
+     * Constructor
+     * @param stack with RPN expression
+     */
     public Calculator(@NotNull Stack<Object> stack) {
         this.expressionStack = stack;
     }
@@ -45,6 +49,11 @@ public class Calculator {
     }
 
 
+    /**
+     * Translates expression to RPL
+     * @param expression to translate
+     * @return stack with expression in RPL form
+     */
     public static @NotNull Stack<Object> toReversePolishNotation(@NotNull String expression) {
         Stack<Object> output = new SimpleStack<>();
         Stack<Operator> operatorStack = new SimpleStack<>();

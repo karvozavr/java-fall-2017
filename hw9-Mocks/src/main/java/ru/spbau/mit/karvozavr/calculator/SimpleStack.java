@@ -1,6 +1,7 @@
 package ru.spbau.mit.karvozavr.calculator;
 
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 
 /**
  * Basic array-based stack implementation.
@@ -11,9 +12,6 @@ public class SimpleStack<T> implements Stack<T> {
 
     ArrayList<T> stack;
 
-    /**
-     * Trivial constructor
-     */
     public SimpleStack() {
         stack = new ArrayList<>();
     }
@@ -30,11 +28,15 @@ public class SimpleStack<T> implements Stack<T> {
 
     @Override
     public T pop() {
+        if (stack.isEmpty())
+            throw new EmptyStackException();
         return stack.remove(stack.size() - 1);
     }
 
     @Override
     public T top() {
+        if (stack.isEmpty())
+            throw new EmptyStackException();
         return stack.get(stack.size() - 1);
     }
 

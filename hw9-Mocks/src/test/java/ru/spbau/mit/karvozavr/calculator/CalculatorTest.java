@@ -1,30 +1,19 @@
 package ru.spbau.mit.karvozavr.calculator;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
 import ru.spbau.mit.karvozavr.calculator.enums.Operator;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class CalculatorTest {
-
-    @Test
-    void testEvaluateWithSimpleStack() {
-        Stack<Object> stack = new SimpleStack<>();
-        Object[] tokens = ExpressionParser.tokenize("2 3 + 4 *");
-        for (int i = tokens.length - 1; i >= 0; --i) {
-            stack.push(tokens[i]);
-        }
-        Calculator calculator = new Calculator(stack);
-        assertThat(calculator.evaluate(), is(20));
-    }
 
     @Test
     void testToPolish() {
@@ -46,12 +35,12 @@ class CalculatorTest {
         Stack<Object> stack = mock(Stack.class);
 
         when(stack.isEmpty())
-                .thenReturn(true)
-                .thenReturn(true)
-                .thenReturn(true)
-                .thenReturn(true)
-                .thenReturn(true)
-                .thenReturn(false);
+                .thenReturn(false)
+                .thenReturn(false)
+                .thenReturn(false)
+                .thenReturn(false)
+                .thenReturn(false)
+                .thenReturn(true);
 
         when(stack.top())
                 .thenReturn(2)
@@ -72,5 +61,43 @@ class CalculatorTest {
 
         Calculator calculator = new Calculator(stack);
         assertThat(calculator.evaluate(), is(20));
+    }
+
+    @Test
+    void testEvaluateExceptionEmpty() {
+        Stack<Object> stack = mock(Stack.class);
+        when(stack.isEmpty()).thenReturn(true);
+        Calculator calculator = new Calculator(stack);
+        assertThrows(InvalidParameterException.class, calculator::evaluate);
+    }
+
+    @Test
+    void testEvaluateException() {
+        Stack<Object> stack = mock(Stack.class);
+        when(stack.isEmpty()).thenReturn(false);
+
+        when(stack.isEmpty())
+                .thenReturn(false)
+                .thenReturn(false)
+                .thenReturn(false)
+                .thenReturn(false)
+                .thenReturn(true);
+
+        when(stack.top())
+                .thenReturn(2)
+                .thenReturn(3)
+                .thenReturn(Operator.PLUS)
+                .thenReturn(4)
+                .thenThrow(new RuntimeException("This method has to be called only 5 times!"));
+
+        when(stack.pop())
+                .thenReturn(2)
+                .thenReturn(3)
+                .thenReturn(Operator.PLUS)
+                .thenReturn(4)
+                .thenThrow(new RuntimeException("This method has to be called only 5 times!"));
+
+        Calculator calculator = new Calculator(stack);
+        assertThrows(InvalidParameterException.class, calculator::evaluate);
     }
 }
