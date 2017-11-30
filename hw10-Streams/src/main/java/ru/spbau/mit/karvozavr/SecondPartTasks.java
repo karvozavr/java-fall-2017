@@ -1,15 +1,34 @@
 package ru.spbau.mit.karvozavr;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public final class SecondPartTasks {
 
-    private SecondPartTasks() {}
+    private SecondPartTasks() {
+    }
 
     // Найти строки из переданных файлов, в которых встречается указанная подстрока.
     public static List<String> findQuotes(List<String> paths, CharSequence sequence) {
-        throw new UnsupportedOperationException();
+        return paths.stream()
+                .map(Paths::get)
+                .flatMap(x -> {
+                    try {
+                        return Files.lines(x);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        return null;
+                    }
+                })
+                .filter(str -> str.contains(sequence))
+                .collect(Collectors.toList());
     }
 
     // В квадрат с длиной стороны 1 вписана мишень.
@@ -22,7 +41,9 @@ public final class SecondPartTasks {
     // Дано отображение из имени автора в список с содержанием его произведений.
     // Надо вычислить, чья общая длина произведений наибольшая.
     public static String findPrinter(Map<String, List<String>> compositions) {
-        throw new UnsupportedOperationException();
+        return compositions.entrySet().stream()
+                .max(Comparator.comparing(x -> x.getValue().stream().mapToInt(String::length).sum()))
+                .map(Map.Entry::getKey).orElse(null);
     }
 
     // Вы крупный поставщик продуктов. Каждая торговая сеть делает вам заказ в виде Map<Товар, Количество>.
