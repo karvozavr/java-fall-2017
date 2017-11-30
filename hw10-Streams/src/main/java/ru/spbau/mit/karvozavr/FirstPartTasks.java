@@ -86,11 +86,12 @@ public final class FirstPartTasks {
     // Вернуть строку, состояющую из конкатенаций переданного массива, и окруженную строками "<", ">"
     // см. тесты
     public static String joinTo(String... strings) {
-        throw new UnsupportedOperationException();
+        return Arrays.stream(strings)
+                .collect(Collectors.joining(", ", "<", ">"));
     }
 
     // Вернуть поток из объектов класса 'clazz'
     public static <R> Stream<R> filterIsInstance(Stream<?> s, Class<R> clazz) {
-        throw new UnsupportedOperationException();
+        return s.filter(clazz::isInstance).map(clazz::cast);
     }
 }
