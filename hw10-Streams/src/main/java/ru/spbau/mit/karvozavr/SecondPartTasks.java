@@ -1,5 +1,6 @@
 package ru.spbau.mit.karvozavr;
 
+import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public final class SecondPartTasks {
 
@@ -35,7 +36,13 @@ public final class SecondPartTasks {
     // Стрелок атакует мишень и каждый раз попадает в произвольную точку квадрата.
     // Надо промоделировать этот процесс с помощью класса java.util.Random и посчитать, какова вероятность попасть в мишень.
     public static double piDividedBy4() {
-        throw new UnsupportedOperationException();
+        Integer attempts = 10000000;
+        Random random = new Random();
+        Stream<Point.Double> stream = Stream.generate(() -> new Point.Double(random.nextDouble(), random.nextDouble()));
+        return stream
+                .limit(attempts)
+                .filter(p -> Point.distance(p.x, p.y, 0.5, 0.5) <= 0.5)
+                .count() / new Double(attempts);
     }
 
     // Дано отображение из имени автора в список с содержанием его произведений.
@@ -49,6 +56,8 @@ public final class SecondPartTasks {
     // Вы крупный поставщик продуктов. Каждая торговая сеть делает вам заказ в виде Map<Товар, Количество>.
     // Необходимо вычислить, какой товар и в каком количестве надо поставить.
     public static Map<String, Integer> calculateGlobalOrder(List<Map<String, Integer>> orders) {
-        throw new UnsupportedOperationException();
+        return orders.stream()
+                .flatMap(map -> map.entrySet().stream())
+                .collect(Collectors.groupingBy(Map.Entry::getKey, Collectors.summingInt(Map.Entry::getValue)));
     }
 }
