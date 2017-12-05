@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/hw10-Streams.iml" filepath="$PROJECT_DIR$/.idea/modules/hw10-Streams.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-22106860/hw10-Streams_main.iml" filepath="$PROJECT_DIR$/.idea/modules/-22106860/hw10-Streams_main.iml" group="hw10-Streams" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-22106860/hw10-Streams_test.iml" filepath="$PROJECT_DIR$/.idea/modules/-22106860/hw10-Streams_test.iml" group="hw10-Streams" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-22106860/java-fall-2017-hw10-Streams.iml" filepath="$PROJECT_DIR$/.idea/modules/-22106860/java-fall-2017-hw10-Streams.iml" />
+    </modules>
+  </component>
+</project>
