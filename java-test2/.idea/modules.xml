@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-548821483/java-fall-2017-java-test2.iml" filepath="$PROJECT_DIR$/.idea/modules/-548821483/java-fall-2017-java-test2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/java-test2.iml" filepath="$PROJECT_DIR$/.idea/modules/java-test2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-548821483/java-test2_main.iml" filepath="$PROJECT_DIR$/.idea/modules/-548821483/java-test2_main.iml" group="java-test2" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-548821483/java-test2_test.iml" filepath="$PROJECT_DIR$/.idea/modules/-548821483/java-test2_test.iml" group="java-test2" />
+    </modules>
+  </component>
+</project>
