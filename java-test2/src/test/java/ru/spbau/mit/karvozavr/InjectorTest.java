@@ -4,10 +4,10 @@ import org.junit.Test;
 import ru.spbau.mit.karvozavr.exceptions.AmbiguousImplementationException;
 import ru.spbau.mit.karvozavr.exceptions.ImplementationNotFoundException;
 import ru.spbau.mit.karvozavr.exceptions.InjectionCycleException;
-import ru.spbau.mit.karvozavr.testclasses.ClassWithOneClassDependency;
-import ru.spbau.mit.karvozavr.testclasses.ClassWithOneInterfaceDependency;
-import ru.spbau.mit.karvozavr.testclasses.ClassWithoutDependencies;
-import ru.spbau.mit.karvozavr.testclasses.InterfaceImpl;
+import ru.spbau.mit.karvozavr.testclasses.*;
+import ru.spbau.mit.karvozavr.testclasses.cycle.CycleA;
+import ru.spbau.mit.karvozavr.testclasses.cycle.CycleB;
+import ru.spbau.mit.karvozavr.testclasses.cycle.CycleC;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,8 +48,18 @@ public class InjectorTest {
         assertTrue(instance.dependency instanceof InterfaceImpl);
     }
 
+
+    @Test
+    public void injectorShouldInitializeClassWithGenericDependency()
+            throws Exception {
+        Object object = Injector.initialize(
+                ClassWithGenericDependency.class.getName(),
+                Collections.singletonList(SomeGenericClass.class.getName())
+        );
+    }
+
     @Test(expected = AmbiguousImplementationException.class)
-    public void testAmbiguousImplementation()
+    public void testAmbiguousImplementationIsThrown()
             throws Exception {
         Object object = Injector.initialize(
                 ClassWithOneInterfaceDependency.class.getName(),
@@ -58,7 +68,7 @@ public class InjectorTest {
     }
 
     @Test(expected = ImplementationNotFoundException.class)
-    public void testImplementationNotFound()
+    public void testImplementationNotFoundIsThrown()
             throws Exception {
         Object object = Injector.initialize(
                 ClassWithOneInterfaceDependency.class.getName(),
@@ -67,7 +77,11 @@ public class InjectorTest {
     }
 
     @Test(expected = InjectionCycleException.class)
-    public void testInjectionCycle() {
-
+    public void testInjectionCycleIsThrown()
+            throws Exception {
+        Object object = Injector.initialize(
+                CycleA.class.getName(),
+                Arrays.asList(CycleB.class.getName(), CycleA.class.getName(), CycleC.class.getName())
+        );
     }
 }
