@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * @param <T> argument type
  * @param <R> return value type
  */
+@FunctionalInterface
 public interface Function1<T, R> {
 
     /**

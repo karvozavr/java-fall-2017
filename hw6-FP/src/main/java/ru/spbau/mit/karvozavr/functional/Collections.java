@@ -16,16 +16,16 @@ public class Collections {
      * @param array    data
      * @param <T>      input type
      * @param <R>      output type
-     * @return array of function results
+     * @return list of function results
      */
     @SuppressWarnings("unchecked")
-    public static <T, R> @NotNull R[] map(@NotNull Function1<? super T, R> function, @NotNull Iterable<T> array) {
+    public static <T, R> @NotNull List<R> map(@NotNull Function1<? super T, ? extends R> function, @NotNull Iterable<T> array) {
         List<R> list = new ArrayList<>();
         for (T x : array) {
             R apply = function.apply(x);
             list.add(apply);
         }
-        return (R[]) list.toArray();
+        return list;
     }
 
     /**
@@ -34,18 +34,17 @@ public class Collections {
      * @param predicate filter
      * @param array     data
      * @param <T>       input type
-     * @param <R>       output type
-     * @return array of function results
+     * @return list of function results
      */
     @SuppressWarnings("unchecked")
-    public static <T, R> @NotNull R[] filter(@NotNull Predicate<? super T> predicate, @NotNull Iterable<T> array) {
+    public static <T> @NotNull List<T> filter(@NotNull Predicate<? super T> predicate, @NotNull Iterable<T> array) {
         List<T> list = new ArrayList<>();
         for (T t : array) {
             if (predicate.apply(t)) {
                 list.add(t);
             }
         }
-        return (R[]) list.toArray();
+        return list;
     }
 
     /**
@@ -54,11 +53,10 @@ public class Collections {
      * @param predicate filter
      * @param array     data
      * @param <T>       input type
-     * @param <R>       output type
      * @return array of function results
      */
     @SuppressWarnings("unchecked")
-    public static <T, R> @NotNull R[] takeWhile(@NotNull Predicate<? super T> predicate, @NotNull Iterable<T> array) {
+    public static <T> @NotNull List<T> takeWhile(@NotNull Predicate<? super T> predicate, @NotNull Iterable<T> array) {
         List<T> list = new ArrayList<>();
         for (T t : array) {
             if (predicate.apply(t)) {
@@ -68,7 +66,7 @@ public class Collections {
             }
         }
 
-        return (R[]) list.toArray();
+        return list;
     }
 
     /**
@@ -77,21 +75,11 @@ public class Collections {
      * @param predicate filter
      * @param array     data
      * @param <T>       input type
-     * @param <R>       output type
      * @return array of function results
      */
     @SuppressWarnings("unchecked")
-    public static <T, R> @NotNull R[] takeUnless(@NotNull Predicate<? super T> predicate, @NotNull Iterable<T> array) {
-        List<T> list = new ArrayList<>();
-        for (T t : array) {
-            if (!predicate.apply(t)) {
-                list.add(t);
-            } else {
-                break;
-            }
-        }
-
-        return (R[]) list.toArray();
+    public static <T> @NotNull List<T> takeUnless(@NotNull Predicate<? super T> predicate, @NotNull Iterable<T> array) {
+        return takeWhile(predicate.not(), array);
     }
 
     /**

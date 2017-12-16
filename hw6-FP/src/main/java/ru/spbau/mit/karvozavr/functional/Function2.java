@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * @param <U> second argument type
  * @param <R> return value type
  */
+@FunctionalInterface
 public interface Function2<T, U, R> {
 
     /**
@@ -28,8 +29,8 @@ public interface Function2<T, U, R> {
      * @param argument to bind
      * @return function f (argument, U)
      */
-    default @NotNull Function2<Object, U, R> bind1(T argument) {
-        return (argument1, argument2) -> Function2.this.apply(argument, argument2);
+    default @NotNull Function1<U, R> bind1(T argument) {
+        return  (argument2) -> Function2.this.apply(argument, argument2);
     }
 
     /**
@@ -38,8 +39,8 @@ public interface Function2<T, U, R> {
      * @param argument to bind
      * @return function f (T, argument)
      */
-    default @NotNull Function2<T, Object, R> bind2(U argument) {
-        return (argument1, argument2) -> Function2.this.apply(argument1, argument);
+    default @NotNull Function1<T, R> bind2(U argument) {
+        return (argument1) -> Function2.this.apply(argument1, argument);
     }
 
     /**

@@ -1,52 +1,61 @@
 package ru.spbau.mit.karvozavr.functional;
 
 import org.junit.jupiter.api.Test;
+import org.junit.platform.commons.util.Preconditions;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
 class PredicateTest {
 
-    @SuppressWarnings("unchecked")
     @Test
     void testAlwaysTrue() {
-        assertThat(Predicate.ALWAYS_TRUE.apply(null), is(true));
-        assertThat(Predicate.ALWAYS_TRUE.apply("Kitten"), is(true));
-        assertThat(Predicate.ALWAYS_TRUE.apply(false), is(true));
-        assertThat(Predicate.ALWAYS_TRUE.apply(true), is(true));
+        assertThat(Predicate.alwaysTrue().apply(null), is(true));
+        assertThat(Predicate.alwaysTrue().apply("Kitten"), is(true));
+        assertThat(Predicate.alwaysTrue().apply(false), is(true));
+        assertThat(Predicate.alwaysTrue().apply(true), is(true));
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     void testAlwaysFalse() {
-        assertThat(Predicate.ALWAYS_FALSE.apply(null), is(false));
-        assertThat(Predicate.ALWAYS_FALSE.apply("Kitten"), is(false));
-        assertThat(Predicate.ALWAYS_FALSE.apply(false), is(false));
-        assertThat(Predicate.ALWAYS_FALSE.apply(true), is(false));
+        assertThat(Predicate.alwaysFalse().apply(null), is(false));
+        assertThat(Predicate.alwaysFalse().apply("Kitten"), is(false));
+        assertThat(Predicate.alwaysFalse().apply(false), is(false));
+        assertThat(Predicate.alwaysFalse().apply(true), is(false));
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     void testNot() {
-        assertThat(Predicate.ALWAYS_TRUE.not().apply(null), is(false));
-        assertThat(Predicate.ALWAYS_FALSE.not().apply(null), is(true));
+        assertThat(Predicate.alwaysTrue().not().apply(null), is(false));
+        assertThat(Predicate.alwaysFalse().not().apply(null), is(true));
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     void testOr() {
-        assertThat(Predicate.ALWAYS_TRUE.or(Predicate.ALWAYS_TRUE).apply(null), is(true));
-        assertThat(Predicate.ALWAYS_TRUE.or(Predicate.ALWAYS_FALSE).apply(null), is(true));
-        assertThat(Predicate.ALWAYS_FALSE.or(Predicate.ALWAYS_TRUE).apply(null), is(true));
-        assertThat(Predicate.ALWAYS_FALSE.or(Predicate.ALWAYS_FALSE).apply(null), is(false));
+        assertThat(Predicate.alwaysTrue().or(Predicate.alwaysTrue()).apply(null), is(true));
+        assertThat(Predicate.alwaysTrue().or(Predicate.alwaysFalse()).apply(null), is(true));
+        assertThat(Predicate.alwaysFalse().or(Predicate.alwaysTrue()).apply(null), is(true));
+        assertThat(Predicate.alwaysFalse().or(Predicate.alwaysFalse()).apply(null), is(false));
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     void testAnd() {
-        assertThat(Predicate.ALWAYS_TRUE.and(Predicate.ALWAYS_TRUE).apply(null), is(true));
-        assertThat(Predicate.ALWAYS_TRUE.and(Predicate.ALWAYS_FALSE).apply(null), is(false));
-        assertThat(Predicate.ALWAYS_FALSE.and(Predicate.ALWAYS_TRUE).apply(null), is(false));
-        assertThat(Predicate.ALWAYS_FALSE.and(Predicate.ALWAYS_FALSE).apply(null), is(false));
+        assertThat(Predicate.alwaysTrue().and(Predicate.alwaysTrue()).apply(null), is(true));
+        assertThat(Predicate.alwaysTrue().and(Predicate.alwaysFalse()).apply(null), is(false));
+        assertThat(Predicate.alwaysFalse().and(Predicate.alwaysTrue()).apply(null), is(false));
+        assertThat(Predicate.alwaysFalse().and(Predicate.alwaysFalse()).apply(null), is(false));
+    }
+
+    @Test
+    void testCustomPredicate() {
+        Predicate<Integer> isEven = x -> x % 2 == 0;
+        Predicate<Integer> isOdd = isEven.not();
+
+        for (int i = 0; i < 1000; i++) {
+            assertThat(isEven.apply(i), is(i % 2 == 0));
+            assertThat(isOdd.apply(i), is(i % 2 != 0));
+            assertThat(isOdd.and(isEven).apply(i), is(false));
+            assertThat(isOdd.or(isEven).apply(i), is(true));
+        }
     }
 }

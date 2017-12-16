@@ -3,6 +3,7 @@ package ru.spbau.mit.karvozavr.functional;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -17,15 +18,15 @@ class CollectionsTest {
 
     @Test
     void testMap() {
-        ArrayList<Integer> array = new ArrayList<>();
+        List<Integer> array = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             array.add(i);
         }
-        Object[] array2 = Collections.map(x -> 2 * x, array);
+        List<Integer> array2 = Collections.map(x -> 2 * x, array);
         for (int i = 0; i < 10; i++) {
             array.set(i, array.get(i) * 2);
         }
-        assertArrayEquals(array2, array.toArray());
+        assertEquals(array2, array);
     }
 
     @Test
@@ -34,12 +35,12 @@ class CollectionsTest {
         for (int i = 0; i < 10; i++) {
             array.add(i);
         }
-        Object[] array2 = Collections.filter(x -> x % 2 == 0, array);
+        List<Integer> array2 = Collections.filter(x -> x % 2 == 0, array);
         array = new ArrayList<>();
         for (int i = 0; i < 10; i += 2) {
             array.add(i);
         }
-        assertArrayEquals(array2, array.toArray());
+        assertEquals(array2, array);
     }
 
     @Test
@@ -48,12 +49,12 @@ class CollectionsTest {
         for (int i = 0; i < 10; i++) {
             array.add(i);
         }
-        Object[] array2 = Collections.takeWhile(x -> x < 5, array);
+        List<Integer> array2 = Collections.takeWhile(x -> x < 5, array);
         array = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             array.add(i);
         }
-        assertArrayEquals(array2, array.toArray());
+        assertEquals(array2, array);
     }
 
     @Test
@@ -62,12 +63,12 @@ class CollectionsTest {
         for (int i = 0; i < 10; i++) {
             array.add(i);
         }
-        Object[] array2 = Collections.takeUnless(x -> x >= 5, array);
+        List<Integer> array2 = Collections.takeUnless(x -> x >= 5, array);
         array = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             array.add(i);
         }
-        assertArrayEquals(array2, array.toArray());
+        assertEquals(array2, array);
     }
 
     @Test

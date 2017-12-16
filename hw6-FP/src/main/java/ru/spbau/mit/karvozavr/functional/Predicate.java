@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <T> type of the argument
  */
+@FunctionalInterface
 public interface Predicate<T> extends Function1<T, Boolean> {
 
     /**
@@ -15,7 +16,7 @@ public interface Predicate<T> extends Function1<T, Boolean> {
      * @param predicate g
      * @return f or g
      */
-    default @NotNull Predicate<T> or(@NotNull Predicate<T> predicate) {
+    default @NotNull Predicate<T> or(@NotNull Predicate<? super T> predicate) {
         return argument -> Predicate.this.apply(argument) || predicate.apply(argument);
     }
 
@@ -25,7 +26,7 @@ public interface Predicate<T> extends Function1<T, Boolean> {
      * @param predicate g
      * @return f and g
      */
-    default @NotNull Predicate<T> and(@NotNull Predicate<T> predicate) {
+    default @NotNull Predicate<T> and(@NotNull Predicate<? super T> predicate) {
         return argument -> Predicate.this.apply(argument) && predicate.apply(argument);
     }
 
@@ -41,10 +42,14 @@ public interface Predicate<T> extends Function1<T, Boolean> {
     /**
      * Constant true predicate
      */
-    Predicate ALWAYS_TRUE = argument -> true;
+    static <T> Predicate<T> alwaysTrue() {
+        return argument -> true;
+    }
 
     /**
      * Constant false predicate
      */
-    Predicate ALWAYS_FALSE = argument -> false;
+    static <T> Predicate<T> alwaysFalse() {
+        return argument -> false;
+    }
 }

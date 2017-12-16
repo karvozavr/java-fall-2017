@@ -29,8 +29,8 @@ class Function2Test {
         final Function2<Integer, String, Double> foo = (Integer a, String s) -> a * Double.parseDouble(s);
         final Integer arg1 = 41;
         final String arg2 = "42.5";
-        final Function2<Object, String, Double> bar = foo.bind1(arg1);
-        assertThat(bar.apply("WTF??", arg2), equalTo(arg1 * Double.parseDouble(arg2)));
+        final Function1<String, Double> bar = foo.bind1(arg1);
+        assertThat(bar.apply(arg2), equalTo(arg1 * Double.parseDouble(arg2)));
     }
 
     @Test
@@ -38,8 +38,8 @@ class Function2Test {
         final Function2<Integer, String, Double> foo = (Integer a, String s) -> a * Double.parseDouble(s);
         final Integer arg1 = 41;
         final String arg2 = "42.5";
-        final Function2<Integer, Object, Double> bar = foo.bind2(arg2);
-        assertThat(bar.apply(arg1, 25.6), equalTo(arg1 * Double.parseDouble(arg2)));
+        final Function1<Integer, Double> bar = foo.bind2(arg2);
+        assertThat(bar.apply(arg1), equalTo(arg1 * Double.parseDouble(arg2)));
     }
 
     @Test
