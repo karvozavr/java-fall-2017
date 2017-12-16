@@ -14,18 +14,18 @@ import static org.junit.jupiter.api.Assertions.*;
 class FileOperationsTest {
 
     @Test
-    void testSquareNumbersBase() {
+    void testSquareNumbersBase() throws IOException {
         String data[] = {"1", " ", "22", "", "12", "aaa", "12kele", "12___0", "lol", "2212312"};
         squareNumbersHelper(data);
     }
 
-    @Test
-    void testSquareNumbersSmoke() {
+    @Testgit 
+    void testSquareNumbersSmoke() throws IOException {
         String data[] = {"1", "22", "12", "aaaaa"};
         squareNumbersHelper(data);
     }
 
-    private void squareNumbersHelper(String data[]) {
+    private void squareNumbersHelper(String data[]) throws IOException {
         String inFile = "file.in";
         String outFile = "file.out";
 
@@ -33,8 +33,6 @@ class FileOperationsTest {
             for (String s : data) {
                 outStream.println(s);
             }
-        } catch (FileNotFoundException e) {
-            fail(e);
         }
 
         Object numbers[] = Arrays.stream(data)
@@ -51,15 +49,10 @@ class FileOperationsTest {
 
         try (Stream<String> lines = Files.lines(Paths.get(outFile))) {
             assertArrayEquals(numbers, lines.toArray());
-        } catch (IOException e) {
-            fail(e);
         }
-        try {
-            Files.deleteIfExists(Paths.get(inFile));
-            Files.deleteIfExists(Paths.get(outFile));
-        } catch (IOException e) {
-            fail(e);
-        }
+
+        Files.deleteIfExists(Paths.get(inFile));
+        Files.deleteIfExists(Paths.get(outFile));
     }
 
     @AfterEach

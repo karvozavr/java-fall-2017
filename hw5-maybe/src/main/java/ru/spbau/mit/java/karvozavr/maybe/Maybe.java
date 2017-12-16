@@ -1,14 +1,14 @@
 package ru.spbau.mit.java.karvozavr.maybe;
 
-import org.jetbrains.annotations.Contract;
-import ru.spbau.mit.java.karvozavr.maybe.exception.MaybeIsNothingException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.spbau.mit.java.karvozavr.maybe.exception.MaybeIsNothingException;
 
 import java.util.function.Function;
 
 /**
  * Maybe class. (Similar to Haskell Prelude.Maybe)
+ *
  * @param <U> type of stored value
  */
 public class Maybe<U> {
@@ -21,16 +21,23 @@ public class Maybe<U> {
     private U value;
 
     /**
+     * Nothing object.
+     * It's actually identical for any type U.
+     */
+    private static Maybe<?> nothing = new Maybe<>(null);
+
+    /**
      * Initialize value. Constructs correct Maybe.
+     *
      * @param t value
      */
     private Maybe(@Nullable U t) {
         value = t;
     }
 
-
     /**
      * Get value if this is not Nothing.
+     *
      * @return value
      * @throws MaybeIsNothingException if this is Nothing
      */
@@ -44,6 +51,7 @@ public class Maybe<U> {
 
     /**
      * Check if this is a Just value.
+     *
      * @return if this is a Just value
      */
     public boolean isPresent() {
@@ -52,12 +60,13 @@ public class Maybe<U> {
 
     /**
      * Apply function to the stored value, if it is not Nothing.
+     *
      * @param mapper function to apply
-     * @param <T> type of function return value
+     * @param <T>    type of function return value
      * @return new Maybe that stores result of a function
      */
     @NotNull
-    public <T> Maybe<T> map(@NotNull Function<U, T> mapper) {
+    public <T> Maybe<T> map(@NotNull Function<? super U, ? extends T> mapper) {
         if (isPresent()) {
             return just(mapper.apply(value));
         } else {
@@ -67,7 +76,8 @@ public class Maybe<U> {
 
     /**
      * The only way to create Just value object.
-     * @param t value to store in Maybe
+     *
+     * @param t   value to store in Maybe
      * @param <T> type of value
      * @return new Maybe with stored value
      */
@@ -78,11 +88,13 @@ public class Maybe<U> {
 
     /**
      * The only way to create Nothing object.
+     *
      * @param <T> type of hypothetically value
      * @return new Maybe Nothing
      */
+    @SuppressWarnings("unchecked")
     @NotNull
     public static <T> Maybe<T> nothing() {
-        return new Maybe<>(null);
+        return (Maybe<T>) nothing;
     }
 }

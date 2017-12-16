@@ -8,6 +8,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+/**
+ * Utils to perform arithmetic operations on numbers in files.
+ */
 public class FileOperations {
 
     /**
@@ -17,9 +20,9 @@ public class FileOperations {
      * @param outputFileName output file name
      */
     public static void squareNumbers(@NotNull String inputFileName, @NotNull String outputFileName) {
-        try (Stream<String> lines = Files.lines(Paths.get(inputFileName));
+        try (Stream<String> fileLines = Files.lines(Paths.get(inputFileName));
              PrintStream outStream = new PrintStream(outputFileName)) {
-            lines
+            fileLines
                     .map(FileOperations::parseIntToMaybe)
                     .map(x -> x.map(a -> a * a))
                     .forEach(x -> {
@@ -30,7 +33,7 @@ public class FileOperations {
                                 outStream.println("null");
                             }
                         } catch (MaybeIsNothingException e) {
-                            System.err.println("There has to be no exceptions!");
+                            throw new RuntimeException(e);
                         }
                     });
         } catch (IOException e) {
@@ -46,9 +49,8 @@ public class FileOperations {
      */
     @NotNull
     private static Maybe<Integer> parseIntToMaybe(@NotNull String s) {
-        Integer value;
         try {
-            value = Integer.parseInt(s);
+            Integer value = Integer.parseInt(s);
             return Maybe.just(value);
         } catch (NumberFormatException e) {
             return Maybe.nothing();
