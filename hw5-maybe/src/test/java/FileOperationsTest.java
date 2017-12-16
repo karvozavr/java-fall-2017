@@ -19,7 +19,7 @@ class FileOperationsTest {
         squareNumbersHelper(data);
     }
 
-    @Testgit 
+    @Test
     void testSquareNumbersSmoke() throws IOException {
         String data[] = {"1", "22", "12", "aaaaa"};
         squareNumbersHelper(data);

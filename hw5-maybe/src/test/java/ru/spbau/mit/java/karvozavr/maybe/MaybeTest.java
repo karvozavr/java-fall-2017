@@ -8,13 +8,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class MaybeTest {
 
     @Test
-    void testGetJust() {
+    void testGetJust() throws MaybeIsNothingException {
         Maybe<String> m = Maybe.just("str");
-        try {
-            assertEquals("str", m.get());
-        } catch (MaybeIsNothingException e) {
-            fail(e);
-        }
+        assertEquals("str", m.get());
     }
 
     @Test
@@ -36,12 +32,8 @@ class MaybeTest {
     }
 
     @Test
-    void testMap() {
+    void testMap() throws MaybeIsNothingException {
         Maybe<String> m = Maybe.just("11");
-        try {
-            assertEquals(new Integer(11), m.map(Integer::parseInt).get());
-        } catch (MaybeIsNothingException e) {
-            fail(e);
-        }
+        assertEquals(new Integer(11), m.map(Integer::parseInt).get());
     }
 }
