@@ -20,6 +20,10 @@ public class Calculator {
         this.expressionStack = stack;
     }
 
+    /**
+     * Evaluate expression on stack.
+     * @return result of evaluation
+     */
     public int evaluate() {
         Stack<Integer> valuesStack = new SimpleStack<>();
         while (!expressionStack.isEmpty()) {
