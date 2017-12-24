@@ -1,7 +1,10 @@
-package ru.spbau.mit.karvozavr.calculator.enums;
+package ru.spbau.mit.karvozavr.calculator;
 
 import java.security.InvalidParameterException;
 
+/**
+ * Expression operator entity.
+ */
 public enum Operator {
     PLUS(3),
     MINUS(3),
@@ -20,7 +23,15 @@ public enum Operator {
         this.precedence = precedence;
     }
 
-    public static int Evaluate(int leftOperand, int rightOperand, Operator operator) {
+    /**
+     * Apply binary operator to arguments.
+     *
+     * @param leftOperand  argument 1
+     * @param rightOperand argument 2
+     * @param operator     operator
+     * @return result of application
+     */
+    public static int evaluate(int leftOperand, int rightOperand, Operator operator) {
         switch (operator) {
             case PLUS:
                 return leftOperand + rightOperand;

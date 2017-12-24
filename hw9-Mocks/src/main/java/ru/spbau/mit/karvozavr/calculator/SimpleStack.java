@@ -10,7 +10,7 @@ import java.util.EmptyStackException;
  */
 public class SimpleStack<T> implements Stack<T> {
 
-    ArrayList<T> stack;
+    private ArrayList<T> stack;
 
     public SimpleStack() {
         stack = new ArrayList<>();

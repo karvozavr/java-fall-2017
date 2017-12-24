@@ -1,7 +1,6 @@
 package ru.spbau.mit.karvozavr.calculator;
 
 import org.jetbrains.annotations.NotNull;
-import ru.spbau.mit.karvozavr.calculator.enums.Operator;
 
 import java.security.InvalidParameterException;
 
@@ -21,7 +20,7 @@ public class Calculator {
     }
 
     /**
-     * Evaluate expression on stack.
+     * evaluate expression on stack.
      * @return result of evaluation
      */
     public int evaluate() {
@@ -32,7 +31,7 @@ public class Calculator {
                 try {
                     int operand2 = valuesStack.pop();
                     int operand1 = valuesStack.pop();
-                    valuesStack.push(Operator.Evaluate(operand1, operand2, operator));
+                    valuesStack.push(Operator.evaluate(operand1, operand2, operator));
                 } catch (ClassCastException e) {
                     throw new InvalidParameterException("Expression is incorrect!");
                 }
@@ -53,45 +52,5 @@ public class Calculator {
     }
 
 
-    /**
-     * Translates expression to RPL
-     * @param expression to translate
-     * @return stack with expression in RPL form
-     */
-    public static @NotNull Stack<Object> toReversePolishNotation(@NotNull String expression) {
-        Stack<Object> output = new SimpleStack<>();
-        Stack<Operator> operatorStack = new SimpleStack<>();
-        Object[] tokens = ExpressionParser.tokenize(expression);
-        for (Object token : tokens) {
-            if (token instanceof Integer) {
-                output.push(token);
-            } else if (token instanceof Operator) {
-                if (token == Operator.OPENING_BRACKET) {
-                    operatorStack.push((Operator) token);
-                    continue;
-                }
 
-                if (token == Operator.CLOSING_BRACKET) {
-                    while (!operatorStack.isEmpty() && operatorStack.top() != Operator.OPENING_BRACKET)
-                        output.push(operatorStack.pop());
-                    if (!operatorStack.isEmpty())
-                        operatorStack.pop();
-                    continue;
-                }
-
-                while (!operatorStack.isEmpty() && operatorStack.top().precedence >= ((Operator) token).precedence)
-                    output.push(operatorStack.pop());
-                operatorStack.push((Operator) token);
-            } else {
-                throw new InvalidParameterException("Invalid expression!");
-            }
-        }
-
-        while (!operatorStack.isEmpty()) {
-            output.push(operatorStack.pop());
-        }
-
-        output.reverse();
-        return output;
-    }
 }

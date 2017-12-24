@@ -1,7 +1,6 @@
 package ru.spbau.mit.karvozavr.calculator;
 
 import org.jetbrains.annotations.NotNull;
-import ru.spbau.mit.karvozavr.calculator.enums.Operator;
 
 import java.security.InvalidParameterException;
 import java.util.ArrayList;
@@ -13,6 +12,7 @@ public class ExpressionParser {
 
     /**
      * Tokenize expression to array of tokens (number | operator)
+     *
      * @param expression to tokenize
      * @return array of tokens (number | operator)
      */
@@ -20,8 +20,7 @@ public class ExpressionParser {
         final String[] tokens = expression.split(" ", -1);
         final ArrayList<Object> parsedTokens = new ArrayList<>();
         for (String token : tokens) {
-            final Object parsedToken;
-            parsedToken = parseToken(token);
+            final Object parsedToken = parseToken(token);
             if (parsedToken == null) {
                 throw new InvalidParameterException("Incorrect expression!");
             }
@@ -33,6 +32,7 @@ public class ExpressionParser {
 
     /**
      * Parses single token.
+     *
      * @param expression token to parse
      * @return parsed token
      */
@@ -46,12 +46,16 @@ public class ExpressionParser {
 
     /**
      * Parses single number token.
+     *
      * @param expression token to parse
      * @return parsed token
      */
     private static Integer parseNumber(@NotNull String expression) {
         try {
-            return Integer.parseInt(expression);
+            if (expression.matches("\\d+"))
+                return Integer.parseInt(expression);
+            else
+                return null;
         } catch (NumberFormatException e) {
             return null;
         }
@@ -59,6 +63,7 @@ public class ExpressionParser {
 
     /**
      * Parses single operator token.
+     *
      * @param expression token to parse
      * @return parsed token
      */
@@ -84,5 +89,50 @@ public class ExpressionParser {
             default:
                 return null;
         }
+    }
+
+    /**
+     * Translates expression to RPL
+     *
+     * @param expression to translate
+     * @return stack with expression in RPL form
+     */
+    public static @NotNull Stack<Object> toReversePolishNotation(@NotNull String expression,
+                                                                 @NotNull Stack<Operator> operatorStack,
+                                                                 @NotNull Stack<Object> output) {
+        Object[] tokens = tokenize(expression);
+        for (Object token : tokens) {
+            if (token instanceof Integer) {
+                output.push(token);
+            } else if (token instanceof Operator) {
+                if (token == Operator.OPENING_BRACKET) {
+                    operatorStack.push((Operator) token);
+                    continue;
+                }
+
+                if (token == Operator.CLOSING_BRACKET) {
+                    while (!operatorStack.isEmpty() && operatorStack.top() != Operator.OPENING_BRACKET)
+                        output.push(operatorStack.pop());
+
+                    if (!operatorStack.isEmpty())
+                        operatorStack.pop();
+
+                    continue;
+                }
+
+                while (!operatorStack.isEmpty() && operatorStack.top().precedence >= ((Operator) token).precedence)
+                    output.push(operatorStack.pop());
+                operatorStack.push((Operator) token);
+            } else {
+                throw new InvalidParameterException("Invalid expression!");
+            }
+        }
+
+        while (!operatorStack.isEmpty()) {
+            output.push(operatorStack.pop());
+        }
+
+        output.reverse();
+        return output;
     }
 }
