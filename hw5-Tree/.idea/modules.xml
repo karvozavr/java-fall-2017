@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/hw5-Tree.iml" filepath="$PROJECT_DIR$/.idea/modules/hw5-Tree.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1711033285/hw5-Tree_main.iml" filepath="$PROJECT_DIR$/.idea/modules/1711033285/hw5-Tree_main.iml" group="hw5-Tree" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1711033285/hw5-Tree_test.iml" filepath="$PROJECT_DIR$/.idea/modules/1711033285/hw5-Tree_test.iml" group="hw5-Tree" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/1711033285/java-fall-2017-hw5-Tree.iml" filepath="$PROJECT_DIR$/.idea/modules/1711033285/java-fall-2017-hw5-Tree.iml" />
+    </modules>
+  </component>
+</project>
